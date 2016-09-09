@@ -113,7 +113,7 @@
         <!--Locations View Controller-->
         <scene sceneID="mme-sk-eRE">
             <objects>
-                <viewController id="QQk-kT-YSg" customClass="LocationsViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LocationsVC" id="QQk-kT-YSg" customClass="LocationsViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7JU-1c-aS8"/>
                         <viewControllerLayoutGuide type="bottom" id="RdM-4F-IA4"/>
@@ -131,7 +131,7 @@
         <!--Flickr View Controller-->
         <scene sceneID="ZrH-fX-QhE">
             <objects>
-                <viewController id="Gb1-cI-XUN" customClass="FlickrViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FlickrVC" id="Gb1-cI-XUN" customClass="FlickrViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RuN-WM-keP"/>
                         <viewControllerLayoutGuide type="bottom" id="FPS-vV-WhZ"/>
@@ -149,7 +149,7 @@
         <!--News View Controller-->
         <scene sceneID="gFG-DM-gSh">
             <objects>
-                <viewController id="Q1k-2b-qDW" customClass="NewsViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewsVC" id="Q1k-2b-qDW" customClass="NewsViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AQ6-Nj-A3E"/>
                         <viewControllerLayoutGuide type="bottom" id="vis-Qu-j5M"/>
@@ -167,7 +167,7 @@
         <!--Weather View Controller-->
         <scene sceneID="mQx-g1-iHS">
             <objects>
-                <viewController id="eWW-xj-E1V" customClass="WeatherViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WeatherVC" id="eWW-xj-E1V" customClass="WeatherViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jYs-dy-mVh"/>
                         <viewControllerLayoutGuide type="bottom" id="vJx-Gx-pNh"/>

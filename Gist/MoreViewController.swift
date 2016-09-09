@@ -16,13 +16,37 @@ class MoreViewController: UITableViewController {
     //@IBOutlet var moreLabel: UILabel!
  
     
-    var moreItems: [String] = ["Locations","Flickr Photos","Offers"]
+    var moreItems: [String] = ["Locations","Flickr Photos","News", "Weather"]
     
     
 
     override func viewDidLoad() {
         
+        /*
+        print("More Vc will appear")
+       // self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
+        self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
+        */
         
+        /*
+        
+        let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
+        self.navigationItem.leftBarButtonItem = backButton
+        navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
+        
+        
+        */
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    func goBack() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     
@@ -36,6 +60,58 @@ class MoreViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return moreItems.count
     }
+    
+    
+    
+    
+    /*
+        This gets called when user clicks any Row
+ 
+    */
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        
+        if(indexPath.row == 0)  {
+            
+            print("Row 1 was selected")
+            let locationVC = self.storyboard?.instantiateViewControllerWithIdentifier("LocationsVC") as? LocationsViewController
+            
+            self.navigationController?.pushViewController(locationVC!, animated: true)
+            
+            //self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
+        
+
+        }  else if(indexPath.row == 1)         {
+        
+            print("Row 2 was selected")
+            let newsVC = self.storyboard?.instantiateViewControllerWithIdentifier("NewsVC") as? NewsViewController
+            self.navigationController?.pushViewController(newsVC!, animated: true)
+            
+        
+        } else if(indexPath.row == 2) {
+            
+            print("Row 3 was selected")
+            let flickrVC = self.storyboard?.instantiateViewControllerWithIdentifier("FlickrVC") as? FlickrViewController
+            self.navigationController?.pushViewController(flickrVC!, animated: true)
+        
+    
+        } else if(indexPath.row == 3 ) {
+            print("Row 4 was selected")
+            let weatherVC = self.storyboard?.instantiateViewControllerWithIdentifier("WeatherVC") as? WeatherViewController
+            self.navigationController?.pushViewController(weatherVC!, animated: true)
+
+
+        }  // end if
+        
+            
+    }  // end method
+    
+    
+    
+    
+    
+    
     
     
     /*
