@@ -27,10 +27,10 @@
                                 </constraints>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
-                                        <fragment content="Welcome to Gist Manager">
+                                        <fragment content="Gist Manager">
                                             <attributes>
                                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <font key="NSFont" size="21" name="HelveticaNeue"/>
+                                                <font key="NSFont" size="19" name="HelveticaNeue"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>

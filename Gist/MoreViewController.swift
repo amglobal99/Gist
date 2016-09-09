@@ -28,14 +28,13 @@ class MoreViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
         */
         
-        /*
+        
         
         let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
         self.navigationItem.leftBarButtonItem = backButton
         navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
         
         
-        */
         
         
         
@@ -76,7 +75,6 @@ class MoreViewController: UITableViewController {
             
             print("Row 1 was selected")
             let locationVC = self.storyboard?.instantiateViewControllerWithIdentifier("LocationsVC") as? LocationsViewController
-            
             self.navigationController?.pushViewController(locationVC!, animated: true)
             
             //self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )

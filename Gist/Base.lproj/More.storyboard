@@ -104,7 +104,9 @@
                             <outlet property="delegate" destination="ue4-Nt-7sj" id="Ysw-Hu-XT3"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="More" id="fQe-eJ-81a"/>
+                    <navigationItem key="navigationItem" title="More" id="fQe-eJ-81a">
+                        <barButtonItem key="backBarButtonItem" title="&lt; Backo" id="0g0-Eh-PIt"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3cm-UY-cm0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
