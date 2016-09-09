@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="yp8-Kv-0WG">
+            <objects>
+                <viewController storyboardIdentifier="LoginViewController" id="uPT-78-8SA" customClass="LoginViewController" customModule="Gist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="q2f-Z2-2JD"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZRB-4y-o8E"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tIZ-1Q-WBG">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D49-Ut-fNm">
+                                <rect key="frame" x="228" y="283" width="145" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Login with GitHub"/>
+                                <connections>
+                                    <action selector="TappedLoginButton" destination="uPT-78-8SA" eventType="touchUpInside" id="zmi-0C-bcg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JER-O6-SpA">
+                                <rect key="frame" x="276" y="451" width="56" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Cancel"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.90588235289999997" green="0.88495414419999996" blue="0.70203623879999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="D49-Ut-fNm" firstAttribute="centerX" secondItem="tIZ-1Q-WBG" secondAttribute="centerX" id="CsK-GG-AMg"/>
+                            <constraint firstItem="JER-O6-SpA" firstAttribute="leading" secondItem="tIZ-1Q-WBG" secondAttribute="leadingMargin" constant="256" id="ZSM-z6-boL"/>
+                            <constraint firstItem="D49-Ut-fNm" firstAttribute="centerY" secondItem="tIZ-1Q-WBG" secondAttribute="centerY" id="vfT-q9-tIL"/>
+                            <constraint firstItem="JER-O6-SpA" firstAttribute="top" secondItem="D49-Ut-fNm" secondAttribute="bottom" constant="134" id="wd1-AL-TX4"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zc3-Qd-umt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1401" y="-1719"/>
+        </scene>
+    </scenes>
+</document>
