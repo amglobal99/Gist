@@ -15,8 +15,7 @@ class MoreViewController: UITableViewController {
     
     //@IBOutlet var moreLabel: UILabel!
  
-    
-    var moreItems: [String] = ["Locations","Flickr Photos","News", "Weather"]
+    var moreItems: [String] = ["Locations  >","Flickr Photos  >","News  >", "Weather  >"]
     
     
 
@@ -28,19 +27,15 @@ class MoreViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
         */
         
-        
-        
+    
+        /*
         let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
         self.navigationItem.leftBarButtonItem = backButton
         navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
+    */
         
         
-        
-        
-        
-        
-        
-    }
+    }  // end method
     
     
     
@@ -57,7 +52,10 @@ class MoreViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moreItems.count
+        
+            print("tableView - Number of rows in section :  \(moreItems.count)")
+            return moreItems.count
+            //return 1
     }
     
     
@@ -68,39 +66,38 @@ class MoreViewController: UITableViewController {
  
     */
     
+    
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         
-        if(indexPath.row == 0)  {
+            if(indexPath.row == 0)  {
+                
+                print("Row 1 was selected")
+                let locationVC = self.storyboard?.instantiateViewControllerWithIdentifier("LocationsVC") as? LocationsViewController
+                self.navigationController?.pushViewController(locationVC!, animated: true)
+                
+                //self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
             
-            print("Row 1 was selected")
-            let locationVC = self.storyboard?.instantiateViewControllerWithIdentifier("LocationsVC") as? LocationsViewController
-            self.navigationController?.pushViewController(locationVC!, animated: true)
+            }  else if(indexPath.row == 1)         {
             
-            //self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-        
+                print("Row 2 was selected")
+                let flickrVC = self.storyboard?.instantiateViewControllerWithIdentifier("FlickrVC") as? FlickrViewController
+                self.navigationController?.pushViewController(flickrVC!, animated: true)
+                
+            } else if(indexPath.row == 2) {
+                
+                print("Row 3 was selected")
+                let newsVC = self.storyboard?.instantiateViewControllerWithIdentifier("NewsVC") as? NewsViewController
+                self.navigationController?.pushViewController(newsVC!, animated: true)
 
-        }  else if(indexPath.row == 1)         {
-        
-            print("Row 2 was selected")
-            let newsVC = self.storyboard?.instantiateViewControllerWithIdentifier("NewsVC") as? NewsViewController
-            self.navigationController?.pushViewController(newsVC!, animated: true)
-            
-        
-        } else if(indexPath.row == 2) {
-            
-            print("Row 3 was selected")
-            let flickrVC = self.storyboard?.instantiateViewControllerWithIdentifier("FlickrVC") as? FlickrViewController
-            self.navigationController?.pushViewController(flickrVC!, animated: true)
-        
-    
-        } else if(indexPath.row == 3 ) {
-            print("Row 4 was selected")
-            let weatherVC = self.storyboard?.instantiateViewControllerWithIdentifier("WeatherVC") as? WeatherViewController
-            self.navigationController?.pushViewController(weatherVC!, animated: true)
+            } else if(indexPath.row == 3) {
+                print("Row 4 was selected")
+                let weatherVC = self.storyboard?.instantiateViewControllerWithIdentifier("WeatherVC") as? WeatherViewController
+                self.navigationController?.pushViewController(weatherVC!, animated: true)
 
 
-        }  // end if
+            }  // end if
         
             
     }  // end method
@@ -112,30 +109,20 @@ class MoreViewController: UITableViewController {
     
     
     
-    /*
     
-    // ==== This returns a custom Cell for our Table View ==============================
+    
+    // ==== This returns a CUSTOM CELL for our Table View ==============================
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        
+        print("cellForRow method")
         
         let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath)  as! MoreCell
-        
         let more = moreItems[indexPath.row]    // get current Menu Item from moreItems array
-        
-        cell.moLabel.text = more
-            //cell.moLabel.text = "Jack"
-        
-        
-        
-        
-        
-    // let cell = UITableViewCell(style: .Default, reuseIdentifier: "MoreCell")
-        
+        cell.moreLabel.text = more
+        // let cell = UITableViewCell(style: .Default, reuseIdentifier: "MoreCell")
         cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.grayColor().CGColor
-        
+        cell.layer.borderColor = UIColor.brownColor().CGColor
         
         return cell
         
@@ -143,7 +130,7 @@ class MoreViewController: UITableViewController {
     
     // *************************************
     
-    */
+    
     
     
     

@@ -15,7 +15,8 @@ class MoreCell: UITableViewCell {
    
     
     
-    @IBOutlet weak var moLabel: UILabel!
+    @IBOutlet weak var moreLabel: UILabel!
+    
     
     
 }  // end class
