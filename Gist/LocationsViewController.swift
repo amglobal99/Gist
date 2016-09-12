@@ -28,13 +28,37 @@ class LocationsViewController: UIViewController {
          */
         
         
-        
+        /*
         let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
         navigationItem.leftBarButtonItem = backButton
         navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
        
+        */
         
+        
+        
+        /*
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: UIBarButtonSystemItem.Cancel,
+            target: self,
+            action: #selector(cancelPressed(_:))
+        )
+        
+        */
+        
+        
+        
+        
+        
+    }  // end function
+    
+    
+    /*
+    func cancelPressed(button: UIBarButtonItem) {
+        self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    */
     
     
     

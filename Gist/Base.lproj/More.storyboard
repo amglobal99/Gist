@@ -89,6 +89,13 @@
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3bx-dj-dsX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationBar contentMode="scaleToFill" id="nZc-cL-Wnu">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <items>
+                        <navigationItem title="Title" id="AdV-oo-9yw"/>
+                    </items>
+                </navigationBar>
             </objects>
             <point key="canvasLocation" x="-1408" y="-2143"/>
         </scene>

@@ -12,8 +12,6 @@ import UIKit
 
 class MoreViewController: UITableViewController {
     
-    
-    //@IBOutlet var moreLabel: UILabel!
  
     var moreItems: [String] = ["Locations  >","Flickr Photos  >","News  >", "Weather  >"]
     
@@ -35,15 +33,41 @@ class MoreViewController: UITableViewController {
     */
         
         
+        
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: UIBarButtonSystemItem.Cancel,
+            target: self,
+            action: #selector(cancelPressed(_:))
+        )
+       
+        
+        
+        
+        /*
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "< Home",
+            style: UIBarButtonItemStyle.Plain,
+            target: self,
+            action: #selector(self.goBack())
+        )
+        
+        */
+        
+        
+        
     }  // end method
-    
     
     
     func goBack() {
         self.navigationController?.popViewControllerAnimated(true)
+        
     }
     
-    
+    func cancelPressed(button: UIBarButtonItem) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+
     
     
     // MARK: - Table View
@@ -59,13 +83,10 @@ class MoreViewController: UITableViewController {
     }
     
     
-    
-    
     /*
         This gets called when user clicks any Row
  
     */
-    
     
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -105,17 +126,14 @@ class MoreViewController: UITableViewController {
     
     
     
-    
-    
-    
-    
+
     
     
     // ==== This returns a CUSTOM CELL for our Table View ==============================
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        print("cellForRow method")
+        print("tableView - cellForRow method")
         
         let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath)  as! MoreCell
         let more = moreItems[indexPath.row]    // get current Menu Item from moreItems array

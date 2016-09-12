@@ -21,38 +21,26 @@ class GistTests: XCTestCase {
     }
     
     
-    
-    
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        
-        let tst = Test()
-        //let check: Bool   = tst.doSomething("Pune")
-        
-        var theAge = tst.showAge(40)
-        
-        
-        XCTAssert( theAge > 35 )
-        
-        
-        
     }
     
     
+
+    func testAge() {
+        let tst = Test()
+        var theAge: Int  = tst.showAge(40)
+        XCTAssert( theAge > 35 )
+    }
     
     
-    
-    
+
     func testDoSomething()  {
-        
         let tst = Test()
         var check: Bool = tst.doSomething("Pune")
-        
-        XCTAssert(check == true, "Sorty failed")
-        
-        
+        XCTAssert(check, "Sorty failed")
     }
     
     
@@ -66,4 +54,7 @@ class GistTests: XCTestCase {
         }
     }
     
-}
+    
+    
+    
+}  // end class
