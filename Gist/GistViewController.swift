@@ -47,11 +47,11 @@ class GistViewController: UIViewController {
                 if result.error?.code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title:
                         "Could not get starred status", message: result.error?.description,
-                                                        preferredStyle: .Alert)
+                                                        preferredStyle: .alert)
                     // add ok button
-                    let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     self.alertController?.addAction(okAction)
-                    self.presentViewController(self.alertController!, animated:true,
+                    self.present(self.alertController!, animated:true,
                                                completion: nil)
                 } else if result.error?.code == NSURLErrorNotConnectedToInternet {
                     self.showOrangeNotConnectedBanner("No Internet Connection",
@@ -61,16 +61,16 @@ class GistViewController: UIViewController {
                 }
                 return
             }
-            if let status = result.value where self.isStarred == nil { // just got it
+            if let status = result.value , self.isStarred == nil { // just got it
                 self.isStarred = status
-                self.tableView?.insertRowsAtIndexPaths(
-                    [NSIndexPath(forRow: 2, inSection: 0)],
-                    withRowAnimation: .Automatic)
+                self.tableView?.insertRows(
+                    at: [IndexPath(row: 2, section: 0)],
+                    with: .automatic)
             }
         }
     }
     
-    func showOrangeNotConnectedBanner(title: String, message: String) {
+    func showOrangeNotConnectedBanner(_ title: String, message: String) {
         // show not connected error & tell em to try again when they do have a connection
         // check for existing banner
         if let existingBanner = self.notConnectedBanner {
@@ -79,7 +79,7 @@ class GistViewController: UIViewController {
         self.notConnectedBanner = Banner(title: title,
                                          subtitle: message,
                                          image: nil,
-                                         backgroundColor: UIColor.orangeColor())
+                                         backgroundColor: UIColor.orange)
         self.notConnectedBanner?.dismissesOnSwipe = true
         self.notConnectedBanner?.show(duration: nil)
     }
@@ -95,7 +95,7 @@ class GistViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if let existingBanner = self.notConnectedBanner{
             existingBanner.dismiss()
         }
@@ -119,23 +119,23 @@ class GistViewController: UIViewController {
                     error?.code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title: "Could not star gist",
                                                              message: error?.description,
-                                                             preferredStyle: .Alert)
+                                                             preferredStyle: .alert)
                 } else {
                     self.alertController = UIAlertController(title: "Could not star gist",
                                                              message: "Sorry, your gist couldn't be starred. " +
                         "Maybe GitHub is down or you don't have an internet connection.",
-                                                             preferredStyle: .Alert)
+                                                             preferredStyle: .alert)
                 }
                 // add ok button
-                let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                 self.alertController?.addAction(okAction)
-                self.presentViewController(self.alertController!, animated:true, completion: nil)
+                self.present(self.alertController!, animated:true, completion: nil)
                 return
             }
             self.isStarred = true
-            self.tableView.reloadRowsAtIndexPaths(
-                [NSIndexPath(forRow: 2, inSection: 0)],
-                withRowAnimation: .Automatic)
+            self.tableView.reloadRows(
+                at: [IndexPath(row: 2, section: 0)],
+                with: .automatic)
         }
     }
     
@@ -151,23 +151,23 @@ class GistViewController: UIViewController {
                     error?.code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title: "Could not unstar gist",
                                                              message: error?.description,
-                                                             preferredStyle: .Alert)
+                                                             preferredStyle: .alert)
                 } else {
                     self.alertController = UIAlertController(title: "Could not unstar gist",
                                                              message: "Sorry, your gist couldn't be unstarred. " +
                         "Maybe GitHub is down or you don't have an internet connection.",
-                                                             preferredStyle: .Alert)
+                                                             preferredStyle: .alert)
                 }
                 // add ok button
-                let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                 self.alertController?.addAction(okAction)
-                self.presentViewController(self.alertController!, animated:true, completion: nil)
+                self.present(self.alertController!, animated:true, completion: nil)
                 return
             }
             self.isStarred = false
-            self.tableView.reloadRowsAtIndexPaths(
-                [NSIndexPath(forRow: 2, inSection: 0)],
-                withRowAnimation: .Automatic)
+            self.tableView.reloadRows(
+                at: [IndexPath(row: 2, section: 0)],
+                with: .automatic)
         }
     }
     
@@ -176,11 +176,11 @@ class GistViewController: UIViewController {
     
     //MARK: - Table View
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             if let _ = isStarred {
                 return 3
@@ -192,7 +192,7 @@ class GistViewController: UIViewController {
     }
     
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return "About"
         } else {
@@ -201,42 +201,42 @@ class GistViewController: UIViewController {
     }
     
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        switch (indexPath.section, indexPath.row, isStarred) {
+        switch ((indexPath as NSIndexPath).section, (indexPath as NSIndexPath).row, isStarred) {
                 case (0, 0, _):
                     cell.textLabel?.text = gist?.description
                 case (0, 1, _):
                     cell.textLabel?.text = gist?.ownerLogin
-                case (0, 2, .None):
+                case (0, 2, .none):
                     cell.textLabel?.text = ""
-                case (0, 2, .Some(true)):
+                case (0, 2, .some(true)):
                     cell.textLabel?.text = "Unstar"
-                case (0, 2, .Some(false)):
+                case (0, 2, .some(false)):
                     cell.textLabel?.text = "Star"
                 default: // section 1
-                    cell.textLabel?.text = gist?.files?[indexPath.row].filename
+                    cell.textLabel?.text = gist?.files?[(indexPath as NSIndexPath).row].filename
         }
         
         return cell
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch (indexPath.section, indexPath.row, isStarred){
-        case (0, 2, .Some(true)):
+    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+        switch ((indexPath as NSIndexPath).section, (indexPath as NSIndexPath).row, isStarred){
+        case (0, 2, .some(true)):
             unstarThisGist()
-        case (0, 2, .Some(false)):
+        case (0, 2, .some(false)):
             starThisGist()
         case (1, _, _):
-            guard let file = gist?.files?[indexPath.row],
-                urlString = file.raw_url,
-                url = NSURL(string: urlString) else {
+            guard let file = gist?.files?[(indexPath as NSIndexPath).row],
+                let urlString = file.raw_url,
+                let url = URL(string: urlString) else {
                     return
             }
-            let safariViewController = SFSafariViewController(URL: url)
+            let safariViewController = SFSafariViewController(url: url)
             safariViewController.title = file.filename
             self.navigationController?.pushViewController(safariViewController, animated: true)
         default:

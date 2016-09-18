@@ -29,20 +29,20 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     var gists = [Gist]()
     var nextPageURLString: String?
     var isLoading = false
-    var dateFormatter = NSDateFormatter()
+    var dateFormatter = DateFormatter()
 
     
     
     //MARK: - Segmented Control
-    @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
+    @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         // clear out the table view
         gists = []
         tableView.reloadData()
         
         // only show add & edit buttons for my gists
         if (gistSegmentedControl.selectedSegmentIndex == 2) {
-            self.navigationItem.leftBarButtonItem = self.editButtonItem()
-            let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self,  action: #selector(insertNewObject(_:)))
+            self.navigationItem.leftBarButtonItem = self.editButtonItem
+            let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self,  action: #selector(insertNewObject(_:)))
             self.navigationItem.rightBarButtonItem = addButton
         } else {
             self.navigationItem.leftBarButtonItem = nil
@@ -77,7 +77,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                 } // end guard
                 
                 if let _ = self.safariViewController {
-                    self.dismissViewControllerAnimated(false) {}
+                    self.dismiss(animated: false) {}
                 }  // end if
                 
                 self.loadGists(nil)
@@ -103,7 +103,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
 
-    func loadGists(urlToLoad: String?) {
+    func loadGists(_ urlToLoad: String?) {
         
         self.isLoading = true
         
@@ -119,7 +119,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                 self.nextPageURLString = nextPage
                 
                 // tell refresh control it can stop showing up now
-                if self.refreshControl != nil && self.refreshControl!.refreshing {
+                if self.refreshControl != nil && self.refreshControl!.isRefreshing {
                     self.refreshControl?.endRefreshing()
                  }  // end if
             
@@ -142,8 +142,8 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                 self.gists += fetchedGists
                 
                 // update "last updated" title for refresh control
-                let now = NSDate()
-                let updateString = "Last Updated at " + self.dateFormatter.stringFromDate(now)
+                let now = Date()
+                let updateString = "Last Updated at " + self.dateFormatter.string(from: now)
                 self.refreshControl?.attributedTitle = NSAttributedString(string: updateString)
                 
                 self.tableView.reloadData()
@@ -178,7 +178,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
 
-    func handleLoadGistsError(error: NSError) {
+    func handleLoadGistsError(_ error: NSError) {
         print(error)
         nextPageURLString = nil
         
@@ -198,14 +198,14 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     func showOAuthLoginView() {
         
         print("showOAuthLoginView: Started...")
-        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         GitHubAPIManager.sharedInstance.isLoadingOAuthToken = true
-        guard let loginVC = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+        guard let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else {
                 assert(false, "Misnamed view controller")
                 return
         }
         loginVC.delegate = self
-        self.presentViewController(loginVC, animated: true, completion: nil)
+        self.present(loginVC, animated: true, completion: nil)
         
         print("showOAuthLogin: completed ")
 
@@ -213,7 +213,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     func didTapLoginButton() {
         print("didTapLoginButton- Started")
-        self.dismissViewControllerAnimated(false) {
+        self.dismiss(animated: false) {
              print("didTapLoginButton: controler has beenn dismissed.")
             guard let authURL = GitHubAPIManager.sharedInstance.URLToStartOAuth2Login() else {
                 GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain, code: -1,
@@ -222,12 +222,12 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                         NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"]))
                 return
             }
-            self.safariViewController = SFSafariViewController(URL: authURL)
+            self.safariViewController = SFSafariViewController(url: authURL as URL)
             self.safariViewController?.delegate = self
             guard let webViewController = self.safariViewController else {
                 return
             }
-            self.presentViewController(webViewController, animated: true, completion: nil)
+            self.present(webViewController, animated: true, completion: nil)
             print("didTapLoginBUtton: Completed function processing.")
 
         }
@@ -238,7 +238,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     // MARK: - Creation
-    func insertNewObject(sender: AnyObject) {
+    func insertNewObject(_ sender: AnyObject) {
         let createVC = CreateGistViewController (nibName: nil, bundle: nil)
         
         self.navigationController?.pushViewController(createVC, animated: true)
@@ -247,7 +247,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     // MARK: - Pull to Refresh
-    func refresh(sender:AnyObject) {
+    func refresh(_ sender:AnyObject) {
         GitHubAPIManager.sharedInstance.isLoadingOAuthToken = false
         nextPageURLString = nil // so it doesn't try to append the results
         GitHubAPIManager.sharedInstance.clearCache()
@@ -257,10 +257,10 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     // MARK: - Safari View Controller Delegate
-    func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+    func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
         // Detect not being able to load the OAuth URL
         if (!didLoadSuccessfully) {
-            controller.dismissViewControllerAnimated(true, completion: nil)
+            controller.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -277,7 +277,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                                          subtitle: "Could not load gists." +
             " Try again when you're connected to the internet",
                                          image: nil,
-                                         backgroundColor: UIColor.redColor())
+                                         backgroundColor: UIColor.red)
         self.notConnectedBanner?.dismissesOnSwipe = true
         self.notConnectedBanner?.show(duration: nil)
     }
@@ -290,7 +290,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                                   subtitle: "Your iOS device is almost out of free space.\n" +
             "You will only be able to see your gists when you have an internet connection.",
                                   image: nil,
-                                  backgroundColor: UIColor.orangeColor())
+                                  backgroundColor: UIColor.orange)
         self.errorBanner?.dismissesOnSwipe = true
         self.errorBanner?.show(duration: nil)
     }
@@ -298,13 +298,13 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     // MARK: - Segues
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let gist = gists[indexPath.row] as Gist
-                if let detailViewController = (segue.destinationViewController as! UINavigationController).topViewController as?  GistViewController {
+                let gist = gists[(indexPath as NSIndexPath).row] as Gist
+                if let detailViewController = (segue.destination as! UINavigationController).topViewController as?  GistViewController {
                     detailViewController.gist = gist
-                    detailViewController.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                    detailViewController.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                     detailViewController.navigationItem.leftItemsSupplementBackButton = true
                 }
             }
@@ -360,7 +360,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     // ==============================================
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         
         // WHAT DOES THIS DO ????
@@ -375,9 +375,9 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         if (self.refreshControl == nil ) {
             self.refreshControl = UIRefreshControl()
             self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
-            self.refreshControl?.addTarget(self, action: #selector(refresh(_:)), forControlEvents: UIControlEvents.ValueChanged )
-            self.dateFormatter.dateStyle = .ShortStyle
-            self.dateFormatter.timeStyle = .LongStyle
+            self.refreshControl?.addTarget(self, action: #selector(refresh(_:)), for: UIControlEvents.valueChanged )
+            self.dateFormatter.dateStyle = .short
+            self.dateFormatter.timeStyle = .long
         }  // end if
         
     }  // end function
@@ -397,7 +397,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         // Dispose of any resources that can be recreated.
     }
 
-    override func  viewDidAppear(animated: Bool) {
+    override func  viewDidAppear(_ animated: Bool) {
         
         super.viewDidAppear(animated)
 
@@ -422,7 +422,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if let existingBanner = self.notConnectedBanner{
             existingBanner.dismiss()
         }
@@ -432,11 +432,11 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     // MARK: - Table View
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return gists.count
     }
     
@@ -444,12 +444,12 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("GistCell", forIndexPath: indexPath)  as! GistCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GistCell", for: indexPath)  as! GistCell
         //let item = itemStore.allItems[indexPath.row]
 
-            let gist = gists[indexPath.row]    // get current Gist
+            let gist = gists[(indexPath as NSIndexPath).row]    // get current Gist
         
             if gist.ownerLogin == nil {
                 cell.ownerLabel.text = "Not Available"
@@ -490,8 +490,8 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         
         
         // set cell.ownerImage to display image at gist.ownerAvatarURL
-        if let urlString = gist.ownerAvatarURL, url = NSURL(string: urlString){
-            cell.ownerImage?.pin_setImageFromURL(url, placeholderImage: UIImage(named:"placeholder.gif"))
+        if let urlString = gist.ownerAvatarURL, let url = URL(string: urlString){
+            cell.ownerImage?.pin_setImage(from: url, placeholderImage: UIImage(named:"placeholder.gif"))
            // cell.ownerImage?.pin_setImageFromURL(url, placeholderImage: UIImage(named:"cardStar.png"))
         } else {
            cell.ownerImage?.image = UIImage(named:"placeholder.gif")
@@ -507,7 +507,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         // see if we need to load more gists
         if !isLoading {
             let rowsLoaded = gists.count
-            let rowsRemaining = rowsLoaded - indexPath.row
+            let rowsRemaining = rowsLoaded - (indexPath as NSIndexPath).row
             let rowsToLoadFromBottom = 5
             if rowsRemaining <= rowsToLoadFromBottom {
                 if let nextPage = nextPageURLString {
@@ -537,23 +537,23 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
     
     
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath:   NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath:   IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return gistSegmentedControl.selectedSegmentIndex == 2
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle:   UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let gistToDelete = gists[indexPath.row]
+    override func tableView(_ tableView: UITableView, commit editingStyle:   UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let gistToDelete = gists[(indexPath as NSIndexPath).row]
             guard let idToDelete = gistToDelete.id else {
                 return
             }
             
             // remove from array of gists
-            gists.removeAtIndex(indexPath.row)
+            gists.remove(at: (indexPath as NSIndexPath).row)
             
             // remove table view row
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.deleteRows(at: [indexPath], with: .fade)
             
             // delete from API
             GitHubAPIManager.sharedInstance.deleteGist(idToDelete) {
@@ -561,21 +561,21 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                 if let _ = error {
                     print(error)
                     // Put it back
-                    self.gists.insert(gistToDelete, atIndex: indexPath.row)
-                    tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Right)
+                    self.gists.insert(gistToDelete, at: (indexPath as NSIndexPath).row)
+                    tableView.insertRows(at: [indexPath], with: .right)
                     // tell them it didn't work
                     let alertController = UIAlertController(title: "Could not delete gist",
                                                             message: "Sorry, your gist couldn't be deleted. Maybe GitHub is "
                                                                 + "down or you don't have an internet connection.",
-                                                            preferredStyle: .Alert)
+                                                            preferredStyle: .alert)
                     // add ok button
-                    let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alertController.addAction(okAction)
                     // show the alert
-                    self.presentViewController(alertController, animated:true, completion: nil)
+                    self.present(alertController, animated:true, completion: nil)
                 }
             }
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array,
             // and add a new row to the table view.
         }

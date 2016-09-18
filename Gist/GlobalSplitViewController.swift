@@ -18,9 +18,9 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
     }
     
     func splitViewController(
-        splitViewController: UISplitViewController,
-        collapseSecondaryViewController secondaryViewController: UIViewController!,
-        ontoPrimaryViewController primaryViewController: UIViewController!) -> Bool {
+        _ splitViewController: UISplitViewController,
+        collapseSecondary secondaryViewController: UIViewController!,
+        onto primaryViewController: UIViewController!) -> Bool {
         
         return true
     }

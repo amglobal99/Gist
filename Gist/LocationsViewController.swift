@@ -12,7 +12,9 @@ import UIKit
 class LocationsViewController: UIViewController {
  
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(true)
         
         
     }
@@ -21,51 +23,43 @@ class LocationsViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        /*
-         print("More Vc will appear")
-         // self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-         self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-         */
+        super.viewDidLoad()
         
         
-        /*
-        let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
-        navigationItem.leftBarButtonItem = backButton
-        navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
+        
+        print("Loc -viewDidLoad")
        
-        */
+       // self.navigationController?.navigationBar.topItem?.title = "new"
+        //self.navigationItem.rightBarButtonItem =  UIBarButtonItem(title: "Big", style: .Plain, target: nil, action: nil )
+        
+        let nc = self.navigationController
+        
+        self.navigationItem.title = "Please"
+        //self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Sm", style: .Plain, target: nil, action: nil )
         
         
         
-        /*
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: UIBarButtonSystemItem.Cancel,
-            target: self,
-            action: #selector(cancelPressed(_:))
-        )
-        
-        */
         
         
-    
+        print("Loc- end viewdidload")
+        
         
         
     }  // end function
     
     
-    /*
-    func cancelPressed(button: UIBarButtonItem) {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    */
     
     
-    
-    func goBack() {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
 
+    
+    
+    func goBack(_ button: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    
+    
     
     
     

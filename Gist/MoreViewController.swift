@@ -16,108 +16,59 @@ class MoreViewController: UITableViewController {
     var moreItems: [String] = ["Locations  >","Flickr Photos  >","News  >", "Weather  >"]
     
     
+    
+    /*
+    required init?  (coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        //navigationItem.leftBarButtonItem = editButtonItem()
+        navigationItem.title = "My First"
+    }
+   */
+    
+    
 
     override func viewDidLoad() {
-        
-        /*
-        print("More Vc will appear")
-       // self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-        self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-        */
-        
-    
-        /*
-        let backButton = UIBarButtonItem(title: "< Home", style: UIBarButtonItemStyle.Plain, target: self, action: "goBack")
-        self.navigationItem.leftBarButtonItem = backButton
-        navigationItem.backBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "Helvetica", size: 12)!], forState: UIControlState.Normal)
-    */
-        
-        
-        
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: UIBarButtonSystemItem.Cancel,
-            target: self,
-            action: #selector(cancelPressed(_:))
-        )
-       
-        
-        
-        
-        /*
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: "< Home",
-            style: UIBarButtonItemStyle.Plain,
-            target: self,
-            action: #selector(self.goBack())
-        )
-        
-        */
-        
-        
-        
+        //print("Morevc -1")
+        self.navigationItem.title = "My First"
+        //print("MOrevc -2")
     }  // end method
     
     
-    func goBack() {
-        self.navigationController?.popViewControllerAnimated(true)
+    
+    func goBack (_ button: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
         
     }
     
-    func cancelPressed(button: UIBarButtonItem) {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-
+    
     
     
     // MARK: - Table View
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             print("tableView - Number of rows in section :  \(moreItems.count)")
             return moreItems.count
-            //return 1
     }
     
     
-    /*
-        This gets called when user clicks any Row
- 
-    */
     
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        
-            if(indexPath.row == 0)  {
-                
-                print("Row 1 was selected")
-                let locationVC = self.storyboard?.instantiateViewControllerWithIdentifier("LocationsVC") as? LocationsViewController
+            if((indexPath as NSIndexPath).row == 0)  {
+                let locationVC = self.storyboard?.instantiateViewController(withIdentifier: "LocationsVC") as? LocationsViewController
                 self.navigationController?.pushViewController(locationVC!, animated: true)
-                
-                //self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil )
-            
-            }  else if(indexPath.row == 1)         {
-            
-                print("Row 2 was selected")
-                let flickrVC = self.storyboard?.instantiateViewControllerWithIdentifier("FlickrVC") as? FlickrViewController
+            }  else if((indexPath as NSIndexPath).row == 1)         {
+                let flickrVC = self.storyboard?.instantiateViewController(withIdentifier: "FlickrVC") as? FlickrViewController
                 self.navigationController?.pushViewController(flickrVC!, animated: true)
-                
-            } else if(indexPath.row == 2) {
-                
-                print("Row 3 was selected")
-                let newsVC = self.storyboard?.instantiateViewControllerWithIdentifier("NewsVC") as? NewsViewController
+            } else if((indexPath as NSIndexPath).row == 2) {
+                let newsVC = self.storyboard?.instantiateViewController(withIdentifier: "NewsVC") as? NewsViewController
                 self.navigationController?.pushViewController(newsVC!, animated: true)
-
-            } else if(indexPath.row == 3) {
-                print("Row 4 was selected")
-                let weatherVC = self.storyboard?.instantiateViewControllerWithIdentifier("WeatherVC") as? WeatherViewController
+            } else if((indexPath as NSIndexPath).row == 3) {
+                let weatherVC = self.storyboard?.instantiateViewController(withIdentifier: "WeatherVC") as? WeatherViewController
                 self.navigationController?.pushViewController(weatherVC!, animated: true)
-
-
             }  // end if
         
             
@@ -126,22 +77,20 @@ class MoreViewController: UITableViewController {
     
     
     
-
     
     
     // ==== This returns a CUSTOM CELL for our Table View ==============================
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         print("tableView - cellForRow method")
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath)  as! MoreCell
-        let more = moreItems[indexPath.row]    // get current Menu Item from moreItems array
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MoreCell", for: indexPath)  as! MoreCell
+        let more = moreItems[(indexPath as NSIndexPath).row]    // get current Menu Item from moreItems array
         cell.moreLabel.text = more
         // let cell = UITableViewCell(style: .Default, reuseIdentifier: "MoreCell")
         cell.layer.borderWidth = 1.0
-        cell.layer.borderColor = UIColor.brownColor().CGColor
-        
+        cell.layer.borderColor = UIColor.brown.cgColor
         return cell
         
     }  // end function

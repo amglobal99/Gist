@@ -37,6 +37,7 @@
 		0FC091AA1D7B438500699899 /* Gists.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC091A91D7B438500699899 /* Gists.storyboard */; };
 		0FC091AD1D7B456600699899 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC091AB1D7B456600699899 /* Login.storyboard */; };
 		0FC3E6F01D837E5E001E55D9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FC3E6EF1D837E5E001E55D9 /* MapKit.framework */; };
+		0FCD8EE61D88A24D00404542 /* MoreNavItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD8EE51D88A24D00404542 /* MoreNavItem.swift */; };
 		E73E79CE093A7E7845A5DE3A /* Pods_Gist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F25EA2540B80A5C54FBA94 /* Pods_Gist.framework */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +85,7 @@
 		0FC091A91D7B438500699899 /* Gists.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Gists.storyboard; sourceTree = "<group>"; };
 		0FC091AC1D7B456600699899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		0FC3E6EF1D837E5E001E55D9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0FCD8EE51D88A24D00404542 /* MoreNavItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreNavItem.swift; sourceTree = "<group>"; };
 		1C4CE90711C52956C59105F2 /* Pods-Gist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gist.release.xcconfig"; path = "Pods/Target Support Files/Pods-Gist/Pods-Gist.release.xcconfig"; sourceTree = "<group>"; };
 		87F25EA2540B80A5C54FBA94 /* Pods_Gist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6B80AB1DFF442D16F50C6BC /* Pods-Gist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gist.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Gist/Pods-Gist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		0F4B3C031D747F02006A31AE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0FCD8EE51D88A24D00404542 /* MoreNavItem.swift */,
 				0F404B041D1A2E800045845D /* ResponseJSONObjectSerializable.swift */,
 				0F404B061D1A2F5C0045845D /* AlamofireRequest+JSONSerializable.swift */,
 				0F3783FB1D23FFA400D6B319 /* File.swift */,
@@ -277,9 +280,11 @@
 				TargetAttributes = {
 					0F404AE41D198D200045845D = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 					0F4B3C0C1D749F60006A31AE = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 0F404AE41D198D200045845D;
 					};
 				};
@@ -339,7 +344,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		49125164D4F336BDBED306A7 /* [CP] Embed Pods Frameworks */ = {
@@ -382,6 +387,7 @@
 				0F6257B61D2DE22500AAC952 /* MoreCell.swift in Sources */,
 				0F30D92E1D79B52000C746E4 /* GlobalSplitViewController.swift in Sources */,
 				0F404AED1D198D200045845D /* GistViewController.swift in Sources */,
+				0FCD8EE61D88A24D00404542 /* MoreNavItem.swift in Sources */,
 				0F3784001D25C40900D6B319 /* MoreViewController.swift in Sources */,
 				0F4FEDDD1D7F0EB9007FD615 /* WeatherViewController.swift in Sources */,
 				0F2A1A061D7C6B560093A932 /* Test.swift in Sources */,
@@ -551,6 +557,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.Gist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -563,6 +570,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.Gist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -574,6 +582,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.GistTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gist.app/Gist";
 			};
 			name = Debug;
@@ -586,6 +595,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.GistTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gist.app/Gist";
 			};
 			name = Release;

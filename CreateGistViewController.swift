@@ -15,7 +15,7 @@ class CreateGistViewController: XLFormViewController {
         self.initializeForm()
     }
     
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
+    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: Bundle!) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         self.initializeForm()
     }
@@ -25,16 +25,16 @@ class CreateGistViewController: XLFormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: UIBarButtonSystemItem.Cancel,
+            barButtonSystemItem: UIBarButtonSystemItem.cancel,
             target: self,
             action: #selector(cancelPressed(_:)))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: UIBarButtonSystemItem.Save,
+            barButtonSystemItem: UIBarButtonSystemItem.save,
             target: self,
             action: #selector(savePressed(_:)))
     }
     
-    private func initializeForm() {
+    fileprivate func initializeForm() {
         let form = XLFormDescriptor(title: "Gist")
         
         // Section 1
@@ -43,26 +43,26 @@ class CreateGistViewController: XLFormViewController {
         
         let descriptionRow = XLFormRowDescriptor(tag: "description", rowType:
             XLFormRowDescriptorTypeText, title: "Description")
-        descriptionRow.required = true
+        descriptionRow.isRequired = true
         section1.addFormRow(descriptionRow)
         
         let isPublicRow = XLFormRowDescriptor(tag: "isPublic", rowType:
             XLFormRowDescriptorTypeBooleanSwitch, title: "Public?")
-        isPublicRow.required = false
+        isPublicRow.isRequired = false
         section1.addFormRow(isPublicRow)
         
-        let section2 = XLFormSectionDescriptor.formSectionWithTitle("File 1") as
+        let section2 = XLFormSectionDescriptor.formSection(withTitle: "File 1") as
         XLFormSectionDescriptor
         form.addFormSection(section2)
         
         let filenameRow = XLFormRowDescriptor(tag: "filename", rowType:
             XLFormRowDescriptorTypeText, title: "Filename")
-        filenameRow.required = true
+        filenameRow.isRequired = true
         section2.addFormRow(filenameRow)
         
         let fileContent = XLFormRowDescriptor(tag: "fileContent", rowType:
             XLFormRowDescriptorTypeTextView, title: "File Content")
-        fileContent.required = true
+        fileContent.isRequired = true
         section2.addFormRow(fileContent)
         
         self.form = form
@@ -70,11 +70,11 @@ class CreateGistViewController: XLFormViewController {
     
     
     //MARK: - Save / Cancel
-    func cancelPressed(button: UIBarButtonItem) {
-        self.navigationController?.popViewControllerAnimated(true)
+    func cancelPressed(_ button: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func savePressed(button: UIBarButtonItem) {
+    func savePressed(_ button: UIBarButtonItem) {
         let validationErrors = self.formValidationErrors() as? [NSError]
         guard validationErrors?.count == 0 else {
             self.showFormValidationError(validationErrors!.first)
@@ -83,15 +83,15 @@ class CreateGistViewController: XLFormViewController {
         
         self.tableView.endEditing(true)
         let isPublic: Bool
-        if let isPublicValue = form.formRowWithTag("isPublic")?.value as? Bool {
+        if let isPublicValue = form.formRow(withTag: "isPublic")?.value as? Bool {
             isPublic = isPublicValue
         } else {
             isPublic = false
         }
         
-        guard let description = form.formRowWithTag("description")?.value as? String,
-            filename = form.formRowWithTag("filename")?.value as? String,
-            fileContent = form.formRowWithTag("fileContent")?.value as? String else {
+        guard let description = form.formRow(withTag: "description")?.value as? String,
+            let filename = form.formRow(withTag: "filename")?.value as? String,
+            let fileContent = form.formRow(withTag: "fileContent")?.value as? String else {
                 print("could not get values from creation form")
                 return
         }
@@ -105,19 +105,19 @@ class CreateGistViewController: XLFormViewController {
             result in
             guard result.error == nil,
                 let successValue = result.value
-                where successValue == true else {
+                , successValue == true else {
                     print(result.error)
                     let alertController = UIAlertController(title: "Could not create gist",
                                                             message: "Sorry, your gist couldn't be created. " +
                         "Maybe GitHub is down or you don't have an internet connection.",
-                                                            preferredStyle: .Alert)
+                                                            preferredStyle: .alert)
                     // add ok button
-                    let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated:true, completion: nil)
+                    self.present(alertController, animated:true, completion: nil)
                     return
             }
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
 

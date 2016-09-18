@@ -9,21 +9,21 @@ import SwiftyJSON
 
 extension Alamofire.Request {
     
-    public func responseObject<T: ResponseJSONObjectSerializable>(completionHandler: Response<T, NSError> -> Void) -> Self {
+    public func responseObject<T: ResponseJSONObjectSerializable>(_ completionHandler: (Response<T, NSError>) -> Void) -> Self {
         
         let responseSerializer = ResponseSerializer<T, NSError>        { request, response, data, error in
                 
                 guard error == nil else {
-                    return .Failure(error!)
+                    return .failure(error!)
                 }
                 
                 guard let responseData = data else {
                     let failureReason = "Array could not be serialized because input data was nil."
-                    let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
-                    return .Failure(error)
+                    let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                    return .failure(error)
                 }
                 
-                let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+                let JSONResponseSerializer = Request.JSONResponseSerializer(options: .allowFragments)
                 let result = JSONResponseSerializer.serializeResponse(request, response, responseData, error)
                 
                 /*
@@ -45,23 +45,23 @@ extension Alamofire.Request {
                 
                 
                 switch result {
-                    case .Failure(let error):
-                        return .Failure(error)
-                    case .Success(let value):
+                    case .failure(let error):
+                        return .failure(error)
+                    case .success(let value):
                         let json = SwiftyJSON.JSON(value)
                     
                         if let errorMessage = json["message"].string {
-                            let error = Error.errorWithCode(.DataSerializationFailed, failureReason: errorMessage)
-                            return .Failure(error)
+                            let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: errorMessage)
+                            return .failure(error)
                         }
                         
                         guard let object = T(json: json) else {
                             let failureReason = "Object could not be created"
-                            let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: failureReason)
-                            return .Failure(error)
+                            let error = Alamofire.Error.errorWithCode(.jsonSerializationFailed, failureReason: failureReason)
+                            return .failure(error)
                         }
                         
-                        return .Success(object)
+                        return .success(object)
                     
                 }  // end switch
                 
@@ -73,31 +73,31 @@ extension Alamofire.Request {
   }  //end function
     
     
-    public func responseArray<T: ResponseJSONObjectSerializable>(completionHandler: Response<[T], NSError> -> Void) -> Self {
+    public func responseArray<T: ResponseJSONObjectSerializable>(_ completionHandler: (Response<[T], NSError>) -> Void) -> Self {
         
         let responseSerializer = ResponseSerializer<[T], NSError>
             { request, response, data, error in
                     guard error == nil else {
-                        return .Failure(error!)
+                        return .failure(error!)
                     }
             
                     guard let responseData = data else {
                         let failureReason = "Array could not be serialized because input data was nil."
-                        let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
-                        return .Failure(error)
+                        let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                        return .failure(error)
                     }
             
-                let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+                let JSONResponseSerializer = Request.JSONResponseSerializer(options: .allowFragments)
                 let result = JSONResponseSerializer.serializeResponse(request, response, responseData, error)
             
                 switch result {
-                case .Failure(let error):
-                    return .Failure(error)
-                case .Success(let value):
+                case .failure(let error):
+                    return .failure(error)
+                case .success(let value):
                     let json = SwiftyJSON.JSON(value)
                     if let errorMessage = json["message"].string {
-                            let error = Error.errorWithCode(.DataSerializationFailed, failureReason: errorMessage)
-                            return .Failure(error)
+                            let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: errorMessage)
+                            return .failure(error)
                     }
                     
                     var objects: [T] = []
@@ -107,7 +107,7 @@ extension Alamofire.Request {
                         }
                     }  // end for loop
                     
-                    return .Success(objects)
+                    return .success(objects)
                 } // end switch
            } // end closure
         

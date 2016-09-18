@@ -16,15 +16,15 @@ enum GistRouter: URLRequestConvertible {
     static let baseURLString:String = "https://api.github.com/"
     
       
-    case GetPublic() // GET https://api.github.com/gists/public
-    case GetMyStarred() // GET https://api.github.com/gists/starred
-    case GetMine() // GET https://api.github.com/gists
-    case IsStarred(String) // GET https://api.github.com/gists/\(gistId)/star
-    case GetAtPath(String) // GET at given path
-    case Star(String) // PUT https://api.github.com/gists/\(gistId)/star
-    case Unstar(String) // DELETE https://api.github.com/gists/\(gistId)/star
-    case Delete(String) // DELETE https://api.github.com/gists/\(gistId)
-    case Create([String: AnyObject]) // POST https://api.github.com/gists
+    case getPublic() // GET https://api.github.com/gists/public
+    case getMyStarred() // GET https://api.github.com/gists/starred
+    case getMine() // GET https://api.github.com/gists
+    case isStarred(String) // GET https://api.github.com/gists/\(gistId)/star
+    case getAtPath(String) // GET at given path
+    case star(String) // PUT https://api.github.com/gists/\(gistId)/star
+    case unstar(String) // DELETE https://api.github.com/gists/\(gistId)/star
+    case delete(String) // DELETE https://api.github.com/gists/\(gistId)
+    case create([String: AnyObject]) // POST https://api.github.com/gists
     
     
     
@@ -34,13 +34,13 @@ enum GistRouter: URLRequestConvertible {
         // +++++++++++++ which HTTP method ? ++++++++++++++++++
         var method: Alamofire.Method {
             switch self {
-            case .GetPublic, .GetAtPath, .GetMine, .GetMyStarred, .IsStarred:
+            case .getPublic, .getAtPath, .getMine, .getMyStarred, .isStarred:
                 return .GET
-            case .Star:
+            case .star:
                 return .PUT
-            case .Unstar, .Delete:
+            case .unstar, .delete:
                 return .DELETE
-            case .Create:
+            case .create:
                 return .POST
             }
         }
@@ -49,34 +49,34 @@ enum GistRouter: URLRequestConvertible {
         
         // ++++++++++++++++ obtain URL +++++++++++++++++++++++++
         
-        let url:NSURL = {
+        let url:URL = {
             // build up and return the URL for each endpoint
             let relativePath:String?
             switch self {
-            case .GetAtPath(let path):
+            case .getAtPath(let path):
                 // already have the full URL, so just return it
-                return NSURL(string: path)!
-            case .GetPublic():
+                return Foundation.URL(string: path)!
+            case .getPublic():
                 relativePath = "gists/public"
-            case .GetMyStarred:
+            case .getMyStarred:
                 relativePath = "gists/starred"
-            case .GetMine():
+            case .getMine():
                 relativePath = "gists"
-            case .IsStarred(let id):
+            case .isStarred(let id):
                 relativePath = "gists/\(id)/star"
-            case .Star(let id):
+            case .star(let id):
                 relativePath = "gists/\(id)/star"
-            case .Unstar(let id):
+            case .unstar(let id):
                 relativePath = "gists/\(id)/star"
-            case .Delete(let id):
+            case .delete(let id):
                 relativePath = "gists/\(id)"
-            case .Create:
+            case .create:
                 relativePath = "gists"
             }
             
-            var URL = NSURL(string: GistRouter.baseURLString)!
+            var URL = Foundation.URL(string: GistRouter.baseURLString)!
             if let relativePath = relativePath {
-                URL = URL.URLByAppendingPathComponent(relativePath)
+                URL = URL.appendingPathComponent(relativePath)
             }
             return URL
         }()
@@ -85,9 +85,9 @@ enum GistRouter: URLRequestConvertible {
         // ++++++++++++++ obtain params ++++++++++++++++++++++++++++++
         let params: ([String: AnyObject]?) = {
             switch self {
-            case .GetPublic, .GetAtPath, .GetMyStarred, .GetMine, .IsStarred, .Star, .Unstar, .Delete:
+            case .getPublic, .getAtPath, .getMyStarred, .getMine, .isStarred, .star, .unstar, .delete:
                 return nil
-            case .Create(let params):
+            case .create(let params):
                 return params
             }
         }()
@@ -95,17 +95,17 @@ enum GistRouter: URLRequestConvertible {
         
         
         //  +++++++++++++ create NSMutableRequest object that we wil  return ++++++++++
-        let URLRequest = NSMutableURLRequest(URL: url)
+        let URLRequest = NSMutableURLRequest(url: url)
         
         // Set OAuth token if we have one
         if let token = GitHubAPIManager.sharedInstance.OAuthToken {
             URLRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
         }
         
-        let encoding = Alamofire.ParameterEncoding.JSON
+        let encoding = Alamofire.ParameterEncoding.json
         let (encodedRequest, _) = encoding.encode(URLRequest, parameters: params)
         
-        encodedRequest.HTTPMethod = method.rawValue
+        encodedRequest.httpMethod = method.rawValue
         
         
         // +++++++  return NSMutableURLRequest object +++++++++++

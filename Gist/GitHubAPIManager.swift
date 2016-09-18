@@ -20,7 +20,7 @@ class GitHubAPIManager {
     // handler for the OAuth process
     // stored as vars since sometimes it requires a round trip to safari which
     // makes it hard to just keep a reference to it
-    var OAuthTokenCompletionHandler:(NSError? -> Void)?
+    var OAuthTokenCompletionHandler:((NSError?) -> Void)?
     
     
     
@@ -50,7 +50,7 @@ class GitHubAPIManager {
     //MARK: - Supporting Functions
     
     func clearCache()-> Void  {
-        let cache = NSURLCache.sharedURLCache()
+        let cache = URLCache.shared
         cache.removeAllCachedResponses()
     }
     
@@ -68,7 +68,7 @@ class GitHubAPIManager {
         return false
     }
     
-    func checkUnauthorized(urlResponse: NSHTTPURLResponse) -> (NSError?) {
+    func checkUnauthorized(_ urlResponse: HTTPURLResponse) -> (NSError?) {
         if (urlResponse.statusCode == 401) {
             self.OAuthToken = nil
             let lostOAuthError = NSError(domain: NSURLErrorDomain,
@@ -90,13 +90,13 @@ class GitHubAPIManager {
      The completion handler variable is originally defined in GistsViewController under 'loadGists' method
     */
     
-    func fetchGists(urlRequest: URLRequestConvertible, completionHandler:  (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchGists(_ urlRequest: URLRequestConvertible, completionHandler:  (Result<[Gist], NSError>, String?) -> Void) {
         
         Alamofire.request(urlRequest)
             .responseArray { (response:Response<[Gist], NSError>) in
                 if let urlResponse = response.response,
-                    authError = self.checkUnauthorized(urlResponse) {   // checkUnauthorized returns NSError if error present
-                    completionHandler(.Failure(authError), nil)
+                    let authError = self.checkUnauthorized(urlResponse) {   // checkUnauthorized returns NSError if error present
+                    completionHandler(.failure(authError), nil)
                     return
                 }
                 // need to figure out if this is the last page
@@ -114,33 +114,33 @@ class GitHubAPIManager {
      This method calls the generic 'fetchGists'   method
     */
     
-    func fetchPublicGists(pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void   ) {
+    func fetchPublicGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void   ) {
         
         if let urlString = pageToLoad {
-            fetchGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
+            fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
         } else {
-            fetchGists(GistRouter.GetPublic(), completionHandler: completionHandler)
+            fetchGists(GistRouter.getPublic(), completionHandler: completionHandler)
         }
     }
     
     
-    func fetchMyStarredGists(pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchMyStarredGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
         if let urlString = pageToLoad {
-            fetchGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
+            fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
         } else {
-            fetchGists(GistRouter.GetMyStarred(), completionHandler: completionHandler)
+            fetchGists(GistRouter.getMyStarred(), completionHandler: completionHandler)
         }
     }
     
-    func fetchMyGists(pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchMyGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
         if let urlString = pageToLoad {
-            fetchGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
+            fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
         } else {
-            fetchGists(GistRouter.GetMine(), completionHandler: completionHandler)
+            fetchGists(GistRouter.getMine(), completionHandler: completionHandler)
         }
     }
     
-    func imageFromURLString(imageURLString: String, completionHandler: (UIImage?,NSError?)-> Void ) {
+    func imageFromURLString(_ imageURLString: String, completionHandler: (UIImage?,NSError?)-> Void ) {
         
         
         print("Getting image from URl : " + imageURLString)
@@ -158,7 +158,7 @@ class GitHubAPIManager {
  
                 
             
-            let image = UIImage(data: data! as NSData)
+            let image = UIImage(data: data! as Data)
             completionHandler(image, nil)
             
         }  //end closure
@@ -175,7 +175,7 @@ class GitHubAPIManager {
         
         print("printMyStarredGistsWithOAuth2: Starting....")
         
-        let alamofireRequest = Alamofire.request(GistRouter.GetMyStarred())
+        let alamofireRequest = Alamofire.request(GistRouter.getMyStarred())
             .responseString { response in
                 guard let receivedString = response.result.value else {
                     print("printMyStarredGistsWithOAuth2: Notice an error")
@@ -199,7 +199,7 @@ class GitHubAPIManager {
     
     
     //MARK: - Pagination
-    private func parseNextPageFromHeaders(response: NSHTTPURLResponse?) -> String?   {
+    fileprivate func parseNextPageFromHeaders(_ response: HTTPURLResponse?) -> String?   {
         
         guard let linkHeader = response?.allHeaderFields["Link"] as? String else {
             return nil
@@ -207,24 +207,24 @@ class GitHubAPIManager {
         
         let components = linkHeader.characters.split {$0 == ","}.map  {String($0) }
         for item in components {
-            let rangeOfNext = item.rangeOfString("rel=\"next\"", options: [])
+            let rangeOfNext = item.range(of: "rel=\"next\"", options: [])
             guard rangeOfNext != nil else {
                 continue
             }
             
             
-            let rangeOfPaddedURL = item.rangeOfString( "<(.*)>;", options: .RegularExpressionSearch )
+            let rangeOfPaddedURL = item.range( of: "<(.*)>;", options: .regularExpression )
             
             guard let range = rangeOfPaddedURL else {
                 return nil
             }
             
-            let nextURL = item.substringWithRange(range)
+            let nextURL = item.substring(with: range)
             
-            let startIndex = nextURL.startIndex.advancedBy(1)
-            let endIndex = nextURL.endIndex.advancedBy(-2)
+            let startIndex = nextURL.characters.index(nextURL.startIndex, offsetBy: 1)
+            let endIndex = nextURL.characters.index(nextURL.endIndex, offsetBy: -2)
             let urlRange = startIndex..<endIndex
-            return nextURL.substringWithRange(urlRange)
+            return nextURL.substring(with: urlRange)
             
             
         } // end for
@@ -238,11 +238,11 @@ class GitHubAPIManager {
 
     
     // MARK: - OAuth flow
-    func URLToStartOAuth2Login()->NSURL? {
+    func URLToStartOAuth2Login()->URL? {
         
         let authPath:String = "https://github.com/login/oauth/authorize" +
             "?client_id=\(clientID)&scope=gist&state=TEST_STATE"
-        guard let authURL:NSURL = NSURL(string: authPath) else {
+        guard let authURL:URL = URL(string: authPath) else {
             // TODO: handle error
             return nil
         }
@@ -255,14 +255,14 @@ class GitHubAPIManager {
         
     }
     
-    func extractCodeFromOAuthStep1Response(url: NSURL) -> String? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+    func extractCodeFromOAuthStep1Response(_ url: URL) -> String? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         var code:String?
         guard let queryItems = components?.queryItems else {
             return nil
         }
         for queryItem in queryItems {
-            if (queryItem.name.lowercaseString == "code") {
+            if (queryItem.name.lowercased() == "code") {
                 code = queryItem.value
                 break
             }
@@ -270,7 +270,7 @@ class GitHubAPIManager {
         return code
     }
     
-    func parseOAuthTokenResponse(json: JSON) -> String? {
+    func parseOAuthTokenResponse(_ json: JSON) -> String? {
         
         print("parseOAuthTokenResponse: Started")
         
@@ -297,7 +297,7 @@ class GitHubAPIManager {
         return token
     }
     
-    func swapAuthCodeForToken(code: String) {
+    func swapAuthCodeForToken(_ code: String) {
         print("swapAuthCodeForToken: starting ..")
         let getTokenPath:String = "https://github.com/login/oauth/access_token"
         let tokenParams = ["client_id": clientID,
@@ -320,7 +320,7 @@ class GitHubAPIManager {
                 }
                 
                 // extract the token from the response
-                guard let jsonData = receivedResults.dataUsingEncoding(NSUTF8StringEncoding,
+                guard let jsonData = receivedResults.data(using: String.Encoding.utf8,
                     allowLossyConversion: false) else {
                         print("no data received or data not JSON")
                         self.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain, code: -1,
@@ -345,10 +345,10 @@ class GitHubAPIManager {
         }
     }
     
-    func processOAuthStep1Response(url: NSURL) {
+    func processOAuthStep1Response(_ url: URL) {
         
         
-        print("processOAuthStep1Response: url value is " + String(url))
+        print("processOAuthStep1Response: url value is " + String(describing: url))
         
         
         // extract the code from the URL
@@ -371,27 +371,27 @@ class GitHubAPIManager {
    
     
     // MARK: Starring / Unstarring / Star status
-    func isGistStarred(gistId: String, completionHandler: Result<Bool, NSError> -> Void) {
+    func isGistStarred(_ gistId: String, completionHandler: (Result<Bool, NSError>) -> Void) {
         // GET /gists/:id/star
-        Alamofire.request(GistRouter.IsStarred(gistId))
+        Alamofire.request(GistRouter.isStarred(gistId))
             .validate(statusCode: [204])
             .response { (request, response, data, error) in
                 // 204 if starred, 404 if not
                 if let error = error {
                     print(error)
                     if response?.statusCode == 404 {
-                        completionHandler(.Success(false))
+                        completionHandler(.success(false))
                         return
                     }
-                    completionHandler(.Failure(error))
+                    completionHandler(.failure(error))
                     return
                 }
-                completionHandler(.Success(true))
+                completionHandler(.success(true))
         }
     }
     
-    func starGist(gistId: String, completionHandler: (NSError?) -> Void) {
-        Alamofire.request(GistRouter.Star(gistId))
+    func starGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
+        Alamofire.request(GistRouter.star(gistId))
             .validate(statusCode: [204])
             .response { (request, response, data, error) in
                 guard error == nil else {
@@ -402,8 +402,8 @@ class GitHubAPIManager {
         }
     }
     
-    func unstarGist(gistId: String, completionHandler: (NSError?) -> Void) {
-        Alamofire.request(GistRouter.Unstar(gistId))
+    func unstarGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
+        Alamofire.request(GistRouter.unstar(gistId))
             .validate(statusCode: [204])
             .response { (request, response, data, error) in
                 guard error == nil else {
@@ -418,10 +418,10 @@ class GitHubAPIManager {
 
     // MARK: - Create / Delete Gists
     
-    func deleteGist(gistId: String, completionHandler: (NSError?) -> Void) {
-        Alamofire.request(GistRouter.Delete(gistId))
+    func deleteGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
+        Alamofire.request(GistRouter.delete(gistId))
             .response { (request, response, data, error) in
-                if let urlResponse = response, authError = self.checkUnauthorized(urlResponse) {
+                if let urlResponse = response, let authError = self.checkUnauthorized(urlResponse) {
                     completionHandler(authError)
                     return
                 }
@@ -431,7 +431,7 @@ class GitHubAPIManager {
         }
     }
 
-    func createNewGist(description: String, isPublic: Bool, files: [File],  completionHandler: (Result<Bool, NSError>) -> Void) {
+    func createNewGist(_ description: String, isPublic: Bool, files: [File],  completionHandler: (Result<Bool, NSError>) -> Void) {
         let publicString: String
         if isPublic {
             publicString = "true"
@@ -441,30 +441,30 @@ class GitHubAPIManager {
         
         var filesDictionary = [String: AnyObject]()
         for file in files {
-            if let name = file.filename, content = file.content {
+            if let name = file.filename, let content = file.content {
                 filesDictionary[name] = ["content": content]
             }
         }
         
         let parameters:[String: AnyObject] = [
-            "description": description,
-            "isPublic": publicString,
-            "files" : filesDictionary
+            "description": description as AnyObject,
+            "isPublic": publicString as AnyObject,
+            "files" : filesDictionary as AnyObject
         ]
         
-        Alamofire.request(GistRouter.Create(parameters))
+        Alamofire.request(GistRouter.create(parameters))
             .response { (request, response, data, error) in
-                if let urlResponse = response, authError = self.checkUnauthorized(urlResponse) {
-                    completionHandler(.Failure(authError))
+                if let urlResponse = response, let authError = self.checkUnauthorized(urlResponse) {
+                    completionHandler(.failure(authError))
                     return
                 }
                 guard error == nil else {
                     print(error)
-                    completionHandler(.Failure(error!))
+                    completionHandler(.failure(error!))
                     return
                 }
                 self.clearCache()
-                completionHandler(.Success(true))
+                completionHandler(.success(true))
         }
     }
     

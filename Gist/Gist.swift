@@ -11,8 +11,8 @@ class Gist: ResponseJSONObjectSerializable {
     var ownerAvatarURL: String?
     var url: String?
     var files:[File]?
-    var createdAt:NSDate?
-    var updatedAt:NSDate?
+    var createdAt:Date?
+    var updatedAt:Date?
     
     static let sharedDateFormatter = Gist.dateFormatter()
     
@@ -39,10 +39,10 @@ class Gist: ResponseJSONObjectSerializable {
             // Dates
             let dateFormatter = Gist.sharedDateFormatter
             if let dateString = json["created_at"].string {
-                self.createdAt = dateFormatter.dateFromString(dateString)
+                self.createdAt = dateFormatter.date(from: dateString)
             }
             if let dateString = json["updated_at"].string {
-                self.updatedAt = dateFormatter.dateFromString(dateString)
+                self.updatedAt = dateFormatter.date(from: dateString)
             } //end if
             
     } //end init
@@ -53,11 +53,11 @@ class Gist: ResponseJSONObjectSerializable {
     }
     
     
-    class func dateFormatter() -> NSDateFormatter {
-        let aDateFormatter = NSDateFormatter()
+    class func dateFormatter() -> DateFormatter {
+        let aDateFormatter = DateFormatter()
         aDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        aDateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
-        aDateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        aDateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        aDateFormatter.locale = Locale(identifier: "en_US_POSIX")
         return aDateFormatter
     } // end funtion
     

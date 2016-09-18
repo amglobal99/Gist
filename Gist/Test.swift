@@ -12,7 +12,7 @@ import Foundation
 class Test {
     
     
-    func doSomething(str: String) -> Bool {
+    func doSomething(_ str: String) -> Bool {
         
         if str == "Pune" {
             return true
@@ -24,7 +24,7 @@ class Test {
     
     
     
-    func showAge(num: Int) -> Int {
+    func showAge(_ num: Int) -> Int {
         return num/2
     }
     
