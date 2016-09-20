@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         */
         
         
-        let tabBarController = self.window!.rootViewController as! UITabBarController
+        _ = self.window!.rootViewController as! UITabBarController
         // let splitViewController = tabBarController.viewControllers[tabBarController.viewControllers.count-1] as! UISplitViewController
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
