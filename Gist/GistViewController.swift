@@ -45,9 +45,11 @@ class GistViewController: UIViewController {
             result in
             guard result.error == nil else {
                 print(result.error)
-                if result.error?.domain != NSURLErrorDomain {return}
                 
-                if result.error?.code == NSURLErrorUserAuthenticationRequired {
+                
+                if result.error?._domain != NSURLErrorDomain {return}
+                
+                if result.error?._code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title:
                         "Could not get starred status", message: result.error?.description,
                                                         preferredStyle: .alert)
@@ -56,12 +58,16 @@ class GistViewController: UIViewController {
                     self.alertController?.addAction(okAction)
                     self.present(self.alertController!, animated:true,
                                                completion: nil)
-                } else if result.error?.code == NSURLErrorNotConnectedToInternet {
+                } else if result.error?._code == NSURLErrorNotConnectedToInternet {
                     self.showOrangeNotConnectedBanner("No Internet Connection",
                                                       message: "Can not display starred status. " +
                         "Try again when you're connected to the internet")
                     
                 }
+                
+                
+                
+                
                 return
             }
             if let status = result.value , self.isStarred == nil { // just got it

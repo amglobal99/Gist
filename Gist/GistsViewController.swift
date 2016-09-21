@@ -112,7 +112,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         * This is passed around to other functions
         * ===================================================================*/
         
-        let completionHandler: (Result<[Gist], NSError>, String?) -> Void =
+        let completionHandler: (Result<[Gist]>, String?) -> Void =
             
             { (result, nextPage) in
                 self.isLoading = false
@@ -125,7 +125,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
             
             
                 guard result.error == nil else {
-                    self.handleLoadGistsError(result.error!)
+                    self.handleLoadGistsError(result.error! as NSError)
                     return
                 }
                 

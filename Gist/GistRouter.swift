@@ -10,6 +10,17 @@ import SwiftyJSON
 enum GistRouter: URLRequestConvertible {
     
     
+    /// Returns a URL request or throws if an `Error` was encountered.
+    ///
+    /// - throws: An `Error` if the underlying `URLRequest` is `nil`.
+    ///
+    /// - returns: A URL request.
+    public func asURLRequest() throws -> URLRequest {
+        
+    }
+
+    
+    
     // The URLRequestConvertible can be found in Alamorefire.swift
     
     

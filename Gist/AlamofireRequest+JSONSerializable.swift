@@ -9,9 +9,9 @@ import SwiftyJSON
 
 extension Alamofire.Request {
     
-    public func responseObject<T: ResponseJSONObjectSerializable>(_ completionHandler: (Response<T, NSError>) -> Void) -> Self {
+    public func responseObject<T: ResponseJSONObjectSerializable>(_ completionHandler: (DataResponse<T>) -> Void) -> Self {
         
-        let responseSerializer = ResponseSerializer<T, NSError>        { request, response, data, error in
+        let responseSerializer = DataResponseSerializer<T>        { request, response, data, error in
                 
                 guard error == nil else {
                     return .failure(error!)
@@ -19,7 +19,7 @@ extension Alamofire.Request {
                 
                 guard let responseData = data else {
                     let failureReason = "Array could not be serialized because input data was nil."
-                    let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                    let error = Alamofire.AFError.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
                     return .failure(error)
                 }
                 
@@ -73,9 +73,9 @@ extension Alamofire.Request {
   }  //end function
     
     
-    public func responseArray<T: ResponseJSONObjectSerializable>(_ completionHandler: (Response<[T], NSError>) -> Void) -> Self {
+    public func responseArray<T: ResponseJSONObjectSerializable>(_ completionHandler: (DataResponse<[T]>) -> Void) -> Self {
         
-        let responseSerializer = ResponseSerializer<[T], NSError>
+        let responseSerializer = DataResponseSerializer<[T]>
             { request, response, data, error in
                     guard error == nil else {
                         return .failure(error!)

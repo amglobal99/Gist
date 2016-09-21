@@ -27,19 +27,19 @@ class GitHubAPIManager {
     var OAuthToken: String? {
         set {
             guard let newValue = newValue else {
-                let _ = try? Locksmith.deleteDataForUserAccount("github")
+                let _ = try? Locksmith.deleteDataForUserAccount(userAccount: "github")
                 return
             }
             
-            guard let _ = try? Locksmith.updateData(["token": newValue], forUserAccount: "github") else {
-                let _ = try? Locksmith.deleteDataForUserAccount("github")
+            guard let _ = try? Locksmith.updateData(data: ["token": newValue], forUserAccount: "github") else {
+                let _ = try? Locksmith.deleteDataForUserAccount(userAccount: "github")
                 return
             }
         }
         get {
             // try to load from keychain
-            Locksmith.loadDataForUserAccount("github")
-            let dictionary = Locksmith.loadDataForUserAccount("github")
+            Locksmith.loadDataForUserAccount(userAccount: "github")
+            let dictionary = Locksmith.loadDataForUserAccount(userAccount: "github")
             return dictionary?["token"] as? String
         }
     }
@@ -90,10 +90,10 @@ class GitHubAPIManager {
      The completion handler variable is originally defined in GistsViewController under 'loadGists' method
     */
     
-    func fetchGists(_ urlRequest: URLRequestConvertible, completionHandler:  (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchGists(_ urlRequest: URLRequestConvertible, completionHandler:  @escaping (Result<[Gist]>, String?) -> Void) {
         
         Alamofire.request(urlRequest)
-            .responseArray { (response:Response<[Gist], NSError>) in
+            .responseArray { (response:DataResponse<[Gist]>) in
                 if let urlResponse = response.response,
                     let authError = self.checkUnauthorized(urlResponse) {   // checkUnauthorized returns NSError if error present
                     completionHandler(.failure(authError), nil)
@@ -114,7 +114,7 @@ class GitHubAPIManager {
      This method calls the generic 'fetchGists'   method
     */
     
-    func fetchPublicGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void   ) {
+    func fetchPublicGists(_ pageToLoad: String?, completionHandler:   @escaping (Result<[Gist]>, String?) -> Void   ) {
         
         if let urlString = pageToLoad {
             fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
@@ -124,7 +124,7 @@ class GitHubAPIManager {
     }
     
     
-    func fetchMyStarredGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchMyStarredGists(_ pageToLoad: String?, completionHandler:   @escaping (Result<[Gist]>, String?) -> Void) {
         if let urlString = pageToLoad {
             fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
         } else {
@@ -132,7 +132,7 @@ class GitHubAPIManager {
         }
     }
     
-    func fetchMyGists(_ pageToLoad: String?, completionHandler:   (Result<[Gist], NSError>, String?) -> Void) {
+    func fetchMyGists(_ pageToLoad: String?, completionHandler:   @escaping (Result<[Gist]>, String?) -> Void) {
         if let urlString = pageToLoad {
             fetchGists(GistRouter.getAtPath(urlString), completionHandler: completionHandler)
         } else {
@@ -140,7 +140,7 @@ class GitHubAPIManager {
         }
     }
     
-    func imageFromURLString(_ imageURLString: String, completionHandler: (UIImage?,NSError?)-> Void ) {
+    func imageFromURLString(_ imageURLString: String, completionHandler: @escaping (UIImage?,NSError?)-> Void ) {
         
         
         print("Getting image from URl : " + imageURLString)
@@ -371,7 +371,7 @@ class GitHubAPIManager {
    
     
     // MARK: Starring / Unstarring / Star status
-    func isGistStarred(_ gistId: String, completionHandler: (Result<Bool, NSError>) -> Void) {
+    func isGistStarred(_ gistId: String, completionHandler: @escaping (Result<Bool>) -> Void) {
         // GET /gists/:id/star
         Alamofire.request(GistRouter.isStarred(gistId))
             .validate(statusCode: [204])
@@ -431,7 +431,7 @@ class GitHubAPIManager {
         }
     }
 
-    func createNewGist(_ description: String, isPublic: Bool, files: [File],  completionHandler: (Result<Bool, NSError>) -> Void) {
+    func createNewGist(_ description: String, isPublic: Bool, files: [File],  completionHandler: @escaping (Result<Bool>) -> Void) {
         let publicString: String
         if isPublic {
             publicString = "true"
