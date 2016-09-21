@@ -1,5 +1,6 @@
 
 //  GistViewController.swift
+// by JAck PAtil
 
 import UIKit
 import SafariServices
@@ -8,6 +9,8 @@ import BRYXBanner
 
 class GistViewController: UIViewController {
 
+    
+    
     //@IBOutlet weak var detailDescriptionLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
