@@ -1,0 +1,47 @@
+PODS:
+  - Alamofire (4.0.0)
+  - BRYXBanner (0.7.0)
+  - FLAnimatedImage (1.0.12)
+  - Locksmith (3.0.0)
+  - PINCache (2.3)
+  - PINRemoteImage (2.1.4):
+    - PINRemoteImage/FLAnimatedImage (= 2.1.4)
+  - PINRemoteImage/Core (2.1.4):
+    - PINCache (>= 2.1)
+  - PINRemoteImage/FLAnimatedImage (2.1.4):
+    - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
+  - SwiftyJSON (3.0.0)
+  - XLForm (3.2.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - BRYXBanner
+  - Locksmith
+  - PINRemoteImage
+  - SwiftyJSON (from `https://github.com/appsailor/SwiftyJSON.git`, branch `swift3`)
+  - XLForm
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :branch: swift3
+    :git: https://github.com/appsailor/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 2571377e49e6c653a92d993a2bff7a9ca2d71591
+    :git: https://github.com/appsailor/SwiftyJSON.git
+
+SPEC CHECKSUMS:
+  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
+  BRYXBanner: 732f576bf9cc1f3f6138d81e8a048666af1c49db
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  Locksmith: 310b4cc5031af5728bf4db5d4de547a5100c6a3b
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+  PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
+  SwiftyJSON: f57b2b44bc166617372d1c70773591fe9f0f5fd4
+  XLForm: 2250b4e96ab8ffa5f3355838c79edd90de451782
+
+PODFILE CHECKSUM: be855be681cc1c8fb2549ba523790fee8e5f473d
+
+COCOAPODS: 1.1.0.rc.2
