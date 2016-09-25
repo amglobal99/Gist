@@ -146,7 +146,12 @@ class GitHubAPIManager {
         print("Getting image from URl : " + imageURLString)
         
         
-        Alamofire.request(.GET, imageURLString).response {  (request,response,data,error) in
+       Alamofire.request(.GET, imageURLString).response {
+            
+            
+        
+            
+            (request,response,data,error) in
                 
                 
               //guard error  != nil else {
