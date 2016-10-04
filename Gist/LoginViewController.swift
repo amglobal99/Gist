@@ -2,9 +2,7 @@
 //  LoginViewController.swift
 //  Gist
 //
-//  Created by Dad on 6/27/16.
-//  Copyright © 2016 Natsys. All rights reserved.
-//
+
 
 import Foundation
 import UIKit

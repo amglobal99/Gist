@@ -1,6 +1,6 @@
 //  CreateGistViewController.swift
 //  Gist
-//  Created by Dad on 6/29/16.
+
 
 import Foundation
 import XLForm
