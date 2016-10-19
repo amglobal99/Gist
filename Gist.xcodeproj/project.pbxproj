@@ -82,7 +82,7 @@
 		0FC091A21D7B1EAE00699899 /* FlickrViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrViewController.swift; sourceTree = "<group>"; };
 		0FC091A41D7B1ED600699899 /* NewsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		0FC091A71D7B425700699899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/More.storyboard; sourceTree = "<group>"; };
-		0FC091A91D7B438500699899 /* Gists.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Gists.storyboard; sourceTree = "<group>"; };
+		0FC091A91D7B438500699899 /* Gists.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Gists.storyboard; path = Gist/Gists.storyboard; sourceTree = "<group>"; };
 		0FC091AC1D7B456600699899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
 		0FC3E6EF1D837E5E001E55D9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0FCD8EE51D88A24D00404542 /* MoreNavItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreNavItem.swift; sourceTree = "<group>"; };
@@ -115,9 +115,9 @@
 		0F404ADC1D198D200045845D = {
 			isa = PBXGroup;
 			children = (
+				3EE4354835E40F69BEA33C2F /* Frameworks */,
 				0F404AE71D198D200045845D /* Gist */,
 				0F4B3C0E1D749F60006A31AE /* GistTests */,
-				3EE4354835E40F69BEA33C2F /* Frameworks */,
 				6840F77F082C887FCFE760BC /* Pods */,
 				0F404AE61D198D200045845D /* Products */,
 			);
@@ -135,11 +135,11 @@
 		0F404AE71D198D200045845D /* Gist */ = {
 			isa = PBXGroup;
 			children = (
+				0F75E7361DB7056E00457A84 /* STORYBOARDS */,
 				0F404AE81D198D200045845D /* AppDelegate.swift */,
 				0F404AF61D198D200045845D /* Info.plist */,
 				0F2A1A051D7C6B560093A932 /* Test.swift */,
 				0F404AF11D198D200045845D /* Assets.xcassets */,
-				0F4B3C051D747F9A006A31AE /* View */,
 				0F4B3C031D747F02006A31AE /* Model */,
 				0F4B3C021D747EB8006A31AE /* Controller */,
 				0F4B3C041D747F6F006A31AE /* GistAPI */,
@@ -187,18 +187,6 @@
 			name = GistAPI;
 			sourceTree = "<group>";
 		};
-		0F4B3C051D747F9A006A31AE /* View */ = {
-			isa = PBXGroup;
-			children = (
-				0F404AF31D198D200045845D /* LaunchScreen.storyboard */,
-				0F404AEE1D198D200045845D /* Main.storyboard */,
-				0FC091AB1D7B456600699899 /* Login.storyboard */,
-				0FC091A91D7B438500699899 /* Gists.storyboard */,
-				0FC091A61D7B425600699899 /* More.storyboard */,
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
 		0F4B3C0E1D749F60006A31AE /* GistTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +194,19 @@
 				0F4B3C111D749F60006A31AE /* Info.plist */,
 			);
 			path = GistTests;
+			sourceTree = "<group>";
+		};
+		0F75E7361DB7056E00457A84 /* STORYBOARDS */ = {
+			isa = PBXGroup;
+			children = (
+				0FC091AB1D7B456600699899 /* Login.storyboard */,
+				0FC091A91D7B438500699899 /* Gists.storyboard */,
+				0FC091A61D7B425600699899 /* More.storyboard */,
+				0F404AF31D198D200045845D /* LaunchScreen.storyboard */,
+				0F404AEE1D198D200045845D /* Main.storyboard */,
+			);
+			name = STORYBOARDS;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		3EE4354835E40F69BEA33C2F /* Frameworks */ = {
@@ -434,6 +435,7 @@
 				0F404AEF1D198D200045845D /* Base */,
 			);
 			name = Main.storyboard;
+			path = Gist;
 			sourceTree = "<group>";
 		};
 		0F404AF31D198D200045845D /* LaunchScreen.storyboard */ = {
@@ -442,6 +444,7 @@
 				0F404AF41D198D200045845D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = Gist;
 			sourceTree = "<group>";
 		};
 		0FC091A61D7B425600699899 /* More.storyboard */ = {
@@ -450,6 +453,7 @@
 				0FC091A71D7B425700699899 /* Base */,
 			);
 			name = More.storyboard;
+			path = Gist;
 			sourceTree = "<group>";
 		};
 		0FC091AB1D7B456600699899 /* Login.storyboard */ = {
@@ -458,6 +462,7 @@
 				0FC091AC1D7B456600699899 /* Base */,
 			);
 			name = Login.storyboard;
+			path = Gist;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

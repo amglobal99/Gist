@@ -146,21 +146,24 @@ class GitHubAPIManager {
         print("Getting image from URl : " + imageURLString)
         
         
-       Alamofire.request(.GET, imageURLString).response {
+      Alamofire.request(.GET, imageURLString).response {
             
-            
+          //  Alamofire.request(imageURLString).responseString {
         
             
             (request,response,data,error) in
                 
+              //  (response) in
                 
-              //guard error  != nil else {
+                
+              
                 guard error == nil else {
                 print(error)
                 print("An error occurred while getting Image")
                 return
             }
  
+                
                 
             
             let image = UIImage(data: data! as Data)
@@ -309,9 +312,13 @@ class GitHubAPIManager {
                            "client_secret": clientSecret,
                            "code": code]
         let jsonHeader = ["Accept": "application/json"]
-        Alamofire.request(.POST, getTokenPath, parameters: tokenParams,
-            headers: jsonHeader)
-            .responseString { response in
+        
+        
+        
+        // Alamofire.request(.POST, getTokenPath, parameters: tokenParams, headers: jsonHeader).responseString
+            
+        Alamofire.request(getTokenPath, method:.post, parameters: tokenParams, encoding: JSONEncoding.default).responseJSON
+            { response in
                 guard response.result.error == nil,
                     let receivedResults = response.result.value else {
                         print(response.result.error!)
@@ -325,7 +332,7 @@ class GitHubAPIManager {
                 }
                 
                 // extract the token from the response
-                guard let jsonData = receivedResults.data(using: String.Encoding.utf8,
+                guard let jsonData = (receivedResults as AnyObject).data(using: String.Encoding.utf8,
                     allowLossyConversion: false) else {
                         print("no data received or data not JSON")
                         self.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain, code: -1,
