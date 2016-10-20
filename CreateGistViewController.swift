@@ -71,7 +71,7 @@ class CreateGistViewController: XLFormViewController {
     
     //MARK: - Save / Cancel
     func cancelPressed(_ button: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
+       _ =  self.navigationController?.popViewController(animated: true)
     }
     
     func savePressed(_ button: UIBarButtonItem) {
@@ -117,7 +117,7 @@ class CreateGistViewController: XLFormViewController {
                     self.present(alertController, animated:true, completion: nil)
                     return
             }
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
 

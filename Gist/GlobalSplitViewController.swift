@@ -15,6 +15,7 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
         self.delegate = self
     }
     
+    /*
     func splitViewController(
         _ splitViewController: UISplitViewController,
         collapseSecondary secondaryViewController: UIViewController!,
@@ -22,5 +23,21 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
         
         return true
     }
+    */
+    
+    
+    func splitViewController(
+        _ splitViewController: UISplitViewController,
+        collapseSecondary secondaryViewController: UIViewController,
+        onto primaryViewController: UIViewController) -> Bool {
+        
+        return true
+    }
+
+    
+    
+    
+    
+    
     
 }

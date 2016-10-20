@@ -43,16 +43,16 @@ enum GistRouter: URLRequestConvertible {
     
         
         // +++++++++++++ which HTTP method ? ++++++++++++++++++
-        var method: Alamofire.Method {
+        var method: Alamofire.HTTPMethod {
             switch self {
             case .getPublic, .getAtPath, .getMine, .getMyStarred, .isStarred:
-                return .GET
+                return .get
             case .star:
-                return .PUT
+                return .put
             case .unstar, .delete:
-                return .DELETE
+                return .delete
             case .create:
-                return .POST
+                return .post
             }
         }
         

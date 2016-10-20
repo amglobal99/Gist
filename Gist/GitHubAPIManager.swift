@@ -38,7 +38,7 @@ class GitHubAPIManager {
         }
         get {
             // try to load from keychain
-            Locksmith.loadDataForUserAccount(userAccount: "github")
+            //Locksmith.loadDataForUserAccount(userAccount: "github")
             let dictionary = Locksmith.loadDataForUserAccount(userAccount: "github")
             return dictionary?["token"] as? String
         }
@@ -92,19 +92,19 @@ class GitHubAPIManager {
     
     func fetchGists(_ urlRequest: URLRequestConvertible, completionHandler:  @escaping (Result<[Gist]>, String?) -> Void) {
         
-        Alamofire.request(urlRequest)
-            .responseArray { (response:DataResponse<[Gist]>) in
+       _ =  Alamofire.request(urlRequest).responseArray {
+            (response:DataResponse<[Gist]>) in
                 if let urlResponse = response.response,
                     let authError = self.checkUnauthorized(urlResponse) {   // checkUnauthorized returns NSError if error present
                     completionHandler(.failure(authError), nil)
                     return
-                }
+                } // end if
                 // need to figure out if this is the last page
                 // check the link header, if present
                 let next = self.parseNextPageFromHeaders(response.response)
                 completionHandler(response.result, next)
-        }
-    }
+        } // end closure
+    } // end func
     
     
     
@@ -140,33 +140,49 @@ class GitHubAPIManager {
         }
     }
     
+    
+    
+    
+    
+    
     func imageFromURLString(_ imageURLString: String, completionHandler: @escaping (UIImage?,NSError?)-> Void ) {
         
         
         print("Getting image from URl : " + imageURLString)
         
         
-      Alamofire.request(.GET, imageURLString).response {
+      // Alamofire.request(.GET, imageURLString).response {
             
-          //  Alamofire.request(imageURLString).responseString {
-        
+          Alamofire.request(imageURLString).response  {
             
-            (request,response,data,error) in
-                
-              //  (response) in
-                
-                
-              
-                guard error == nil else {
-                print(error)
-                print("An error occurred while getting Image")
-                return
-            }
+                       // (request,response,data,error) in
+                        
+                         response  in
+                            
+                          //  (response) in
+                            
+                            /*
+                          
+                            guard error == nil else {
+                            print(error)
+                            print("An error occurred while getting Image")
+                            return
+                                
+                               */
+                        
+                        
+                        guard response.error == nil else {
+                            return
+                        }
+            
+            //}  // end closure
  
                 
                 
             
-            let image = UIImage(data: data! as Data)
+        //    let image = UIImage(data:  data! as Data)
+            let image = UIImage(data:  response.data! )
+        
             completionHandler(image, nil)
             
         }  //end closure
@@ -175,7 +191,16 @@ class GitHubAPIManager {
     }  //end fucntion
     
     
-    
+
+
+
+
+
+
+
+
+
+
     
 
     //MARK: - OAuth 2.0
@@ -387,14 +412,38 @@ class GitHubAPIManager {
         // GET /gists/:id/star
         Alamofire.request(GistRouter.isStarred(gistId))
             .validate(statusCode: [204])
-            .response { (request, response, data, error) in
+            //.response { (request, response, data, error) in
+                
+            .response { response in
+                
+                
                 // 204 if starred, 404 if not
-                if let error = error {
-                    print(error)
-                    if response?.statusCode == 404 {
+                if let error = response.error {
+                    print(response.error)
+                    
+                    
+                    
+                    
+                    // if response?.statusCode == 404 {
+                    
+                    
+                    
+                    //***********  TO BE FIXED ***************************************
+                         if response.response?.statusCode  == 404 {
+                    
+                        
                         completionHandler(.success(false))
                         return
                     }
+ 
+                   
+ 
+                    
+                    
+                    
+                    
+                    
+ 
                     completionHandler(.failure(error))
                     return
                 }
@@ -402,27 +451,38 @@ class GitHubAPIManager {
         }
     }
     
+    
+    
+    
+    
     func starGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
         Alamofire.request(GistRouter.star(gistId))
             .validate(statusCode: [204])
-            .response { (request, response, data, error) in
-                guard error == nil else {
-                    print(error)
+            //.response { (request, response, data, error) in
+                
+            .response { response in
+                
+                guard response.error == nil else {
+                    print(response.error)
                     return
                 }
-                completionHandler(error)
+                completionHandler(response.error as NSError?)
         }
     }
     
     func unstarGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
         Alamofire.request(GistRouter.unstar(gistId))
             .validate(statusCode: [204])
-            .response { (request, response, data, error) in
-                guard error == nil else {
-                    print(error)
+           // .response { (request, response, data, error) in
+                
+            .response {  response in
+                
+                
+                guard response.error == nil else {
+                    print(response.error)
                     return
                 }
-                completionHandler(error)
+                completionHandler(response.error as NSError?)
         }
     }
     
@@ -432,16 +492,28 @@ class GitHubAPIManager {
     
     func deleteGist(_ gistId: String, completionHandler: @escaping (NSError?) -> Void) {
         Alamofire.request(GistRouter.delete(gistId))
-            .response { (request, response, data, error) in
-                if let urlResponse = response, let authError = self.checkUnauthorized(urlResponse) {
+            
+            //.response { (request, response, data, error) in
+                
+            .response  {   response in
+                
+                if let urlResponse = response.response, let authError = self.checkUnauthorized(urlResponse) {
                     completionHandler(authError)
                     return
                 }
                 // error will be nil if the call succeeded
                 self.clearCache()
-                completionHandler(error)
+                completionHandler(response.error as NSError?)
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
 
     func createNewGist(_ description: String, isPublic: Bool, files: [File],  completionHandler: @escaping (Result<Bool>) -> Void) {
         let publicString: String
@@ -454,7 +526,10 @@ class GitHubAPIManager {
         var filesDictionary = [String: AnyObject]()
         for file in files {
             if let name = file.filename, let content = file.content {
+                
                 filesDictionary[name] = ["content": content]
+                
+                
             }
         }
         
@@ -465,14 +540,21 @@ class GitHubAPIManager {
         ]
         
         Alamofire.request(GistRouter.create(parameters))
-            .response { (request, response, data, error) in
-                if let urlResponse = response, let authError = self.checkUnauthorized(urlResponse) {
+           // .response { (request, response, data, error) in
+                
+            .response { response in
+                
+                
+                if let urlResponse = response.response, let authError = self.checkUnauthorized(urlResponse) {
                     completionHandler(.failure(authError))
                     return
                 }
-                guard error == nil else {
-                    print(error)
-                    completionHandler(.failure(error!))
+                
+                //guard error == nil else {
+                guard response.error == nil else {
+                    
+                    print(response.error)
+                    completionHandler(.failure(response.error!))
                     return
                 }
                 self.clearCache()

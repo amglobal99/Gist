@@ -32,7 +32,7 @@ class FlickrViewController: UIViewController {
     
     
     func cancelPressed(_ button: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
+       _ =  self.navigationController?.popViewController(animated: true)
     }
     
     

@@ -34,7 +34,7 @@ class MoreViewController: UITableViewController {
     
     
     func goBack (_ button: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         
     }
     

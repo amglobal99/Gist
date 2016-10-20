@@ -30,7 +30,7 @@ class LocationsViewController: UIViewController {
        // self.navigationController?.navigationBar.topItem?.title = "new"
         //self.navigationItem.rightBarButtonItem =  UIBarButtonItem(title: "Big", style: .Plain, target: nil, action: nil )
         
-        let nc = self.navigationController
+        _ = self.navigationController
         
         self.navigationItem.title = "Please"
         //self.navigationItem.leftBarButtonItem =  UIBarButtonItem(title: "Sm", style: .Plain, target: nil, action: nil )
@@ -52,7 +52,7 @@ class LocationsViewController: UIViewController {
     
     
     func goBack(_ button: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
+       _ = self.navigationController?.popViewController(animated: true)
     }
     
     

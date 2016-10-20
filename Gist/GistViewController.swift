@@ -51,8 +51,7 @@ class GistViewController: UIViewController {
                 
                 if result.error?._code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title:
-                        "Could not get starred status", message: result.error?.description,
-                                                        preferredStyle: .alert)
+                        "Could not get starred status", message: result.error?.localizedDescription, preferredStyle: .alert)
                     // add ok button
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     self.alertController?.addAction(okAction)

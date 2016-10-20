@@ -7,7 +7,13 @@ import Alamofire
 import SwiftyJSON
 
 
-extension Alamofire.Request {
+//extension Alamofire.Request {
+
+
+    extension Alamofire.DataRequest {
+        
+        
+        
     
     public func responseObject<T: ResponseJSONObjectSerializable>(_ completionHandler: (DataResponse<T>) -> Void) -> Self {
         
@@ -18,8 +24,16 @@ extension Alamofire.Request {
                 }
                 
                 guard let responseData = data else {
-                    let failureReason = "Array could not be serialized because input data was nil."
-                    let error = Alamofire.AFError.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                    //let failureReason = "Array could not be serialized because input data was nil."
+                    //let error = Alamofire.AFError.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                    
+                    
+                    let failureReason: AFError.ResponseSerializationFailureReason = "Array could not be serialized because input data was nil."
+                    let error = AFError.responseSerializationFailed(reason: failureReason)
+                    
+                    
+                    
+                    
                     return .failure(error)
                 }
                 
@@ -57,7 +71,11 @@ extension Alamofire.Request {
                         
                         guard let object = T(json: json) else {
                             let failureReason = "Object could not be created"
-                            let error = Alamofire.Error.errorWithCode(.jsonSerializationFailed, failureReason: failureReason)
+                            let error = Alamofire.AFError.responseSerializationFailed(reason: failureReason)
+                            
+                            //Error.errorWithCode(.jsonSerializationFailed, failureReason: failureReason)
+                            
+                            
                             return .failure(error)
                         }
                         
@@ -68,7 +86,12 @@ extension Alamofire.Request {
         }  //end closure
         
         
-        return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+       // return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+        
+          return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
+        
+        
+        
         
   }  //end function
     
@@ -82,12 +105,25 @@ extension Alamofire.Request {
                     }
             
                     guard let responseData = data else {
-                        let failureReason = "Array could not be serialized because input data was nil."
-                        let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                        //let failureReason = "Array could not be serialized because input data was nil."
+                        
+                        let failureReason: AFError.ResponseSerializationFailureReason = "Array could not be serialized because input data was nil."
+                        
+                        
+                       // let error = Alamofire.Error.errorWithCode(.dataSerializationFailed, failureReason: failureReason)
+                        
+                         let error = Alamofire.AFError.responseSerializationFailed(reason: failureReason)
+                        
+                        
                         return .failure(error)
                     }
             
                 let JSONResponseSerializer = Request.JSONResponseSerializer(options: .allowFragments)
+                
+               
+                
+                
+                
                 let result = JSONResponseSerializer.serializeResponse(request, response, responseData, error)
             
                 switch result {
@@ -113,6 +149,8 @@ extension Alamofire.Request {
         
         return response(responseSerializer: responseSerializer, completionHandler: completionHandler)
     
+        
+        
     }  //end func
 
     
