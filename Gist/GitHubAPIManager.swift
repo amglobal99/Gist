@@ -120,7 +120,10 @@ class GitHubAPIManager {
             }
             
             // make sure we got JSON and it's an array of dictionaries
-            guard let json = response.result.value as? [[String: AnyObject]] else {
+         //   guard let json = response.result.value as? [[String: AnyObject]] else {
+                guard let json = response.result.value as? [[String: Any]] else {
+                
+                
                 print("didn't get todo objects as JSON from API")
               //  completionHandler(.failure(BackendError.objectSerialization(reason: "Did not get JSON array in response")))
                 return
@@ -128,14 +131,15 @@ class GitHubAPIManager {
             
             
             
-            // turn each item in JSON in to Todo object
+            // turn each item in JSON in to Gist object
             var gists:[Gist] = []
             for element in json {
-                if let gistResult = Gist(json: element) {
+                let elJson = JSON(element)
+                if let gistResult = Gist(json: elJson) {
                     gists.append(gistResult)
                 }
             }
-            completionHandler(.success(todos))
+            completionHandler(.success(gists), next)
             
             
             
@@ -143,7 +147,7 @@ class GitHubAPIManager {
             
             
             
-                completionHandler(response.result, next)
+               // completionHandler(response.result, next)
         } // end closure
         
         
@@ -373,6 +377,11 @@ class GitHubAPIManager {
         return token
     }
     
+    
+    
+    
+    
+    
     func swapAuthCodeForToken(_ code: String) {
         print("swapAuthCodeForToken: starting ..")
         let getTokenPath:String = "https://github.com/login/oauth/access_token"
@@ -383,12 +392,16 @@ class GitHubAPIManager {
         
         
         
+        
+        
         // Alamofire.request(.POST, getTokenPath, parameters: tokenParams, headers: jsonHeader).responseString
             
         Alamofire.request(getTokenPath, method:.post, parameters: tokenParams, encoding: JSONEncoding.default).responseJSON
             { response in
+                
                 guard response.result.error == nil,
-                    let receivedResults = response.result.value else {
+                    let receivedResults = response.result.value
+                else {
                         print(response.result.error!)
                         self.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain,
                             code: -1,
@@ -399,17 +412,23 @@ class GitHubAPIManager {
                         return
                 }
                 
+                
+                
                 // extract the token from the response
-                guard let jsonData = (receivedResults as AnyObject).data(using: String.Encoding.utf8,  allowLossyConversion: false) else {
+                guard
+                   // let jsonData = (receivedResults as AnyObject).data(using: String.Encoding.utf8,  allowLossyConversion: false)
+                    
+                  let jsonData = response.data
+                    
+                    
+                    
+                    
+                else {
                         
                         
                         // extract the token from the response
                     //    guard let jsonData = (receivedResults as AnyObject).data(using: 2, allowLossyConversion: false) else {
-                                                                                    
-                                                                                    
-                        
-                        
-                        
+                    
                         
                         print("no data received or data not JSON")
                         self.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain, code: -1,
@@ -419,6 +438,10 @@ class GitHubAPIManager {
                         self.isLoadingOAuthToken = false
                         return
                 }
+                
+                
+                
+                
                 let jsonResults = JSON(data: jsonData)
                 self.OAuthToken = self.parseOAuthTokenResponse(jsonResults)
                 self.isLoadingOAuthToken = false
@@ -433,6 +456,16 @@ class GitHubAPIManager {
                 }
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     func processOAuthStep1Response(_ url: URL) {
         
@@ -575,7 +608,10 @@ class GitHubAPIManager {
             publicString = "false"
         }
         
-        var filesDictionary = [String: AnyObject]()
+      //  var filesDictionary = [String: AnyObject]()
+        var filesDictionary = [String: Any]()
+        
+        
         for file in files {
             if let name = file.filename, let content = file.content {
                 

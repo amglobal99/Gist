@@ -2,26 +2,18 @@
 //  GistRouter.swift
 //  
 
+
+//  This enum helps us configure everything related to our URL
+//  This is a very flexible arrangement
+
+
+
 import Foundation
 import Alamofire
 import SwiftyJSON
 
 
-enum GistRouter: URLRequestConvertible {
-    
-    
-    /// Returns a URL request or throws if an `Error` was encountered.
-    ///
-    /// - throws: An `Error` if the underlying `URLRequest` is `nil`.
-    ///
-    /// - returns: A URL request.
-    public func asURLRequest() throws -> URLRequest {
-        
-    }
-
-    
-    
-    // The URLRequestConvertible can be found in Alamorefire.swift
+enum GistRouter: URLRequestConvertible {    // The URLRequestConvertible can be found in Alamorefire.swift
     
     
     static let baseURLString:String = "https://api.github.com/"
@@ -39,93 +31,92 @@ enum GistRouter: URLRequestConvertible {
     
     
     
-    var URLRequest: NSMutableURLRequest {
-    
         
-        // +++++++++++++ which HTTP method ? ++++++++++++++++++
-        var method: Alamofire.HTTPMethod {
-            switch self {
-            case .getPublic, .getAtPath, .getMine, .getMyStarred, .isStarred:
-                return .get
-            case .star:
-                return .put
-            case .unstar, .delete:
-                return .delete
-            case .create:
-                return .post
-            }
-        }
-        
-        
-        
-        // ++++++++++++++++ obtain URL +++++++++++++++++++++++++
-        
-        let url:URL = {
-            // build up and return the URL for each endpoint
-            let relativePath:String?
-            switch self {
-            case .getAtPath(let path):
-                // already have the full URL, so just return it
-                return Foundation.URL(string: path)!
-            case .getPublic():
-                relativePath = "gists/public"
-            case .getMyStarred:
-                relativePath = "gists/starred"
-            case .getMine():
-                relativePath = "gists"
-            case .isStarred(let id):
-                relativePath = "gists/\(id)/star"
-            case .star(let id):
-                relativePath = "gists/\(id)/star"
-            case .unstar(let id):
-                relativePath = "gists/\(id)/star"
-            case .delete(let id):
-                relativePath = "gists/\(id)"
-            case .create:
-                relativePath = "gists"
-            }
+        func asURLRequest() throws -> URLRequest {
             
-            var URL = Foundation.URL(string: GistRouter.baseURLString)!
-            if let relativePath = relativePath {
-                URL = URL.appendingPathComponent(relativePath)
-            }
-            return URL
-        }()
+                var urlRequest: URLRequest
+            
+                
+                // +++++++++++++ which HTTP method ? ++++++++++++++++++
+                var method: Alamofire.HTTPMethod {
+                    switch self {
+                    case .getPublic, .getAtPath, .getMine, .getMyStarred, .isStarred:
+                        return .get
+                    case .star:
+                        return .put
+                    case .unstar, .delete:
+                        return .delete
+                    case .create:
+                        return .post
+                    }
+                }
+            
+                // ++++++++++++++++ obtain URL +++++++++++++++++++++++++
+                let url:URL = {
+                    // build up and return the URL for each endpoint
+                    let relativePath:String?
+                    switch self {
+                    case .getAtPath(let path):
+                        // already have the full URL, so just return it
+                        return Foundation.URL(string: path)!
+                    case .getPublic():
+                        relativePath = "gists/public"
+                    case .getMyStarred:
+                        relativePath = "gists/starred"
+                    case .getMine():
+                        relativePath = "gists"
+                    case .isStarred(let id):
+                        relativePath = "gists/\(id)/star"
+                    case .star(let id):
+                        relativePath = "gists/\(id)/star"
+                    case .unstar(let id):
+                        relativePath = "gists/\(id)/star"
+                    case .delete(let id):
+                        relativePath = "gists/\(id)"
+                    case .create:
+                        relativePath = "gists"
+                    }
+                    
+                    var URL = Foundation.URL(string: GistRouter.baseURLString)!
+                    if let relativePath = relativePath {
+                        URL = URL.appendingPathComponent(relativePath)
+                    }
+                    return URL
+                }()
+                
+                
+                // ++++++++++++++ obtain params ++++++++++++++++++++++++++++++
+                let params: ([String: AnyObject]?) = {
+                    switch self {
+                    case .getPublic, .getAtPath, .getMyStarred, .getMine, .isStarred, .star, .unstar, .delete:
+                        return nil
+                    case .create(let params):
+                        return params
+                    }
+                }()
+                
+                
+                
+                //  +++++++++ create URLRequest object that we will  return +++++++++
+                var mutableURLRequest = URLRequest(url: url)
+                mutableURLRequest.httpMethod = method.rawValue
+                
+                // Set OAuth token if we have one
+                if let token = GitHubAPIManager.sharedInstance.OAuthToken {
+                    mutableURLRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
+                }
+            
+                // Set Encoding
+                let encoding = Alamofire.JSONEncoding.default
+                let encodedRequest =  try! encoding.encode(mutableURLRequest as URLRequestConvertible, with: params)
+            
+                // +++++++  return URLRequest object +++++++++++
+                return encodedRequest
+                
         
-        
-        // ++++++++++++++ obtain params ++++++++++++++++++++++++++++++
-        let params: ([String: AnyObject]?) = {
-            switch self {
-            case .getPublic, .getAtPath, .getMyStarred, .getMine, .isStarred, .star, .unstar, .delete:
-                return nil
-            case .create(let params):
-                return params
-            }
-        }()
-        
-        
-        
-        //  +++++++++++++ create NSMutableRequest object that we wil  return ++++++++++
-        let URLRequest = NSMutableURLRequest(url: url)
-        
-        // Set OAuth token if we have one
-        if let token = GitHubAPIManager.sharedInstance.OAuthToken {
-            URLRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
-        }
-        
-        let encoding = Alamofire.ParameterEncoding.json
-        let (encodedRequest, _) = encoding.encode(URLRequest, parameters: params)
-        
-        encodedRequest.httpMethod = method.rawValue
-        
-        
-        // +++++++  return NSMutableURLRequest object +++++++++++
-        return encodedRequest
-        
-    }  // var URLRequest
-
+    }  // end func
     
-    
+        
     
     
 }   // end enum

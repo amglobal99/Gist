@@ -18,7 +18,10 @@ class Gist: ResponseJSONObjectSerializable {
     
     
     // init for JSON
-    required init(json: JSON) {
+    //required init(json: JSON) {
+        
+        required init?(json: JSON) {
+        
             self.description = json["description"].string
             self.id = json["id"].string
             self.ownerLogin = json["owner"]["login"].string
@@ -52,8 +55,9 @@ class Gist: ResponseJSONObjectSerializable {
     required init() {
     }
     
-    
-    
+
+
+    /*
     
     convenience init(json: [String:Any] ) {
         self.description = json["description"] as? String
@@ -62,7 +66,7 @@ class Gist: ResponseJSONObjectSerializable {
         //self.ownerAvatarURL = json["owner"]["avatar_url"] as? String
         
         
-         ///**************  These adde by JP ******************
+         ///**************  These adde by JP ******************/
         var ownerLogin = json["owner"] as? [String:Any]
         self.ownerLogin = ownerLogin?["login"] as? String
         self.ownerAvatarURL = ownerLogin?["avatar_url"] as? String
@@ -80,7 +84,7 @@ class Gist: ResponseJSONObjectSerializable {
             } // end for
         }  // end if
         
-        
+ 
         
         
         // Dates
@@ -92,10 +96,11 @@ class Gist: ResponseJSONObjectSerializable {
             self.updatedAt = dateFormatter.date(from: dateString)
         } //end if
         
-    } //end init
+    }
     
 
-    
+*/
+ 
     
     
     
@@ -120,5 +125,9 @@ class Gist: ResponseJSONObjectSerializable {
     } // end funtion
     
     
+ 
+ 
+ 
+ 
     
-} // end class
+}  // end class
