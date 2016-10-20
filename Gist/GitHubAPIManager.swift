@@ -92,18 +92,61 @@ class GitHubAPIManager {
     
     func fetchGists(_ urlRequest: URLRequestConvertible, completionHandler:  @escaping (Result<[Gist]>, String?) -> Void) {
         
-       _ =  Alamofire.request(urlRequest).responseArray {
-            (response:DataResponse<[Gist]>) in
-                if let urlResponse = response.response,
-                    let authError = self.checkUnauthorized(urlResponse) {   // checkUnauthorized returns NSError if error present
+      // _ =  Alamofire.request(urlRequest).responseArray {
+        //  (response:DataResponse<[Gist]>) in
+        
+        
+        
+        _ =  Alamofire.request(urlRequest).responseJSON {
+             response in
+      
+            
+                if let urlResponse = response.response, let authError = self.checkUnauthorized(urlResponse) {
+                    // checkUnauthorized returns NSError if error is present
                     completionHandler(.failure(authError), nil)
                     return
                 } // end if
                 // need to figure out if this is the last page
                 // check the link header, if present
                 let next = self.parseNextPageFromHeaders(response.response)
+            
+            
+            
+            guard response.result.error == nil else {
+                // got an error in getting the data, need to handle it
+                print(response.result.error!)
+               // completionHandler(.failure(response.result.error!))
+                return
+            }
+            
+            // make sure we got JSON and it's an array of dictionaries
+            guard let json = response.result.value as? [[String: AnyObject]] else {
+                print("didn't get todo objects as JSON from API")
+              //  completionHandler(.failure(BackendError.objectSerialization(reason: "Did not get JSON array in response")))
+                return
+            }
+            
+            
+            
+            // turn each item in JSON in to Todo object
+            var gists:[Gist] = []
+            for element in json {
+                if let gistResult = Gist(json: element) {
+                    gists.append(gistResult)
+                }
+            }
+            completionHandler(.success(todos))
+            
+            
+            
+            
+            
+            
+            
                 completionHandler(response.result, next)
         } // end closure
+        
+        
     } // end func
     
     
@@ -357,8 +400,17 @@ class GitHubAPIManager {
                 }
                 
                 // extract the token from the response
-                guard let jsonData = (receivedResults as AnyObject).data(using: String.Encoding.utf8,
-                    allowLossyConversion: false) else {
+                guard let jsonData = (receivedResults as AnyObject).data(using: String.Encoding.utf8,  allowLossyConversion: false) else {
+                        
+                        
+                        // extract the token from the response
+                    //    guard let jsonData = (receivedResults as AnyObject).data(using: 2, allowLossyConversion: false) else {
+                                                                                    
+                                                                                    
+                        
+                        
+                        
+                        
                         print("no data received or data not JSON")
                         self.OAuthTokenCompletionHandler?(NSError(domain: GitHubAPIManager.ErrorDomain, code: -1,
                             userInfo: [NSLocalizedDescriptionKey:

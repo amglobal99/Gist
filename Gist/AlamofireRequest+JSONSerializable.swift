@@ -13,7 +13,7 @@ import SwiftyJSON
     extension Alamofire.DataRequest {
         
         
-        
+        /*
     
     public func responseObject<T: ResponseJSONObjectSerializable>(_ completionHandler: (DataResponse<T>) -> Void) -> Self {
         
@@ -72,6 +72,7 @@ import SwiftyJSON
                         guard let object = T(json: json) else {
                             let failureReason = "Object could not be created"
                             let error = Alamofire.AFError.responseSerializationFailed(reason: failureReason)
+                            let error = BackendError.objectSerialization(reason: "Did not get JSON dictionary in response")
                             
                             //Error.errorWithCode(.jsonSerializationFailed, failureReason: failureReason)
                             
@@ -153,5 +154,11 @@ import SwiftyJSON
         
     }  //end func
 
+ 
+ 
+ */
+ 
+ 
+ 
     
 }  // end extension
