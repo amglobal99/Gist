@@ -211,6 +211,12 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
 
     }
     
+    
+    
+    
+    
+    
+    
     func didTapLoginButton() {
         print("didTapLoginButton- Started")
         self.dismiss(animated: false) {
@@ -232,6 +238,13 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
 
         }
     }
+    
+    
+    
+    
+    
+    
+    
     
     
     

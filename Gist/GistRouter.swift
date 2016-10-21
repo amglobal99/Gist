@@ -6,8 +6,6 @@
 //  This enum helps us configure everything related to our URL
 //  This is a very flexible arrangement
 
-
-
 import Foundation
 import Alamofire
 import SwiftyJSON
@@ -37,7 +35,7 @@ enum GistRouter: URLRequestConvertible {    // The URLRequestConvertible can be 
                 var urlRequest: URLRequest
             
                 
-                // +++++++++++++ which HTTP method ? ++++++++++++++++++
+                // +++++++++++++ which HTTP method ? ++++++++++++++
                 var method: Alamofire.HTTPMethod {
                     switch self {
                     case .getPublic, .getAtPath, .getMine, .getMyStarred, .isStarred:
@@ -51,7 +49,7 @@ enum GistRouter: URLRequestConvertible {    // The URLRequestConvertible can be 
                     }
                 }
             
-                // ++++++++++++++++ obtain URL +++++++++++++++++++++++++
+                // ++++++++++++++++ obtain URL ++++++++++++++++++++
                 let url:URL = {
                     // build up and return the URL for each endpoint
                     let relativePath:String?
@@ -108,7 +106,11 @@ enum GistRouter: URLRequestConvertible {    // The URLRequestConvertible can be 
             
                 // Set Encoding
                 let encoding = Alamofire.JSONEncoding.default
+            
+            
+                //MARK: ToDo
                 let encodedRequest =  try! encoding.encode(mutableURLRequest as URLRequestConvertible, with: params)
+            
             
                 // +++++++  return URLRequest object +++++++++++
                 return encodedRequest
