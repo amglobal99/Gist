@@ -10,6 +10,9 @@ import Locksmith
 class GitHubAPIManager {
     
     static let sharedInstance = GitHubAPIManager()
+  
+  
+  
     //var alamofireManager: Alamofire.Manager
     let clientID: String = "52c236ee0538eb2d784d"
     let clientSecret = "f7de13b794087bc479d279f6f3a44661a78da7e6"
@@ -90,27 +93,36 @@ class GitHubAPIManager {
         
             _ =  Alamofire.request(urlRequest).responseJSON {
                  response in
-                    if let urlResponse = response.response, let authError = self.checkUnauthorized(urlResponse) {
+                    //if let urlResponse = response.response, let authError = self.checkfetcUnauthorized(urlResponse) {
+                        if let urlResponse = response.response, let authError = self.checkUnauthorized(urlResponse) {
+                            
+                        
+                        
                         // checkUnauthorized returns NSError if error is present
                         completionHandler(.failure(authError), nil)
                         return
                     } // end if
+                
                     // need to figure out if this is the last page
                     // check the link header, if present
                     let next = self.parseNextPageFromHeaders(response.response)
+                
                 
                 guard response.result.error == nil else {
                     // got an error in getting the data, need to handle it
                     print(response.result.error!)
                     
                     // MARK: ToDo
-                   //completionHandler(.failure(response.result.error!))
+                  // completionHandler(.failure(response.result.error!) )
+                    
                     
                     return
                 } // end guard
                 
+                
+                
                 // make sure we got JSON and it's an array of dictionaries
-                    guard let json = response.result.value as? [[String: Any]] else {
+                    guard let json = response.result.value as? [[String: AnyObject]] else {
                         print("didn't get Gist objects as JSON from API")
                         
                         // MARK: ToDo
@@ -182,7 +194,7 @@ class GitHubAPIManager {
             Alamofire.request(imageURLString).response  {
                 response  in
                         guard response.error == nil else {
-                            print(response.error)
+                            print(response.error as Any)
                             print("An error occurred while getting Image")
                             return
                         }
@@ -232,7 +244,6 @@ class GitHubAPIManager {
             guard rangeOfNext != nil else {
                 continue
             }
-            
             
             let rangeOfPaddedURL = item.range( of: "<(.*)>;", options: .regularExpression )
             
@@ -424,7 +435,7 @@ class GitHubAPIManager {
                 
                 // 204 if starred, 404 if not
                 if let error = response.error {
-                    print(response.error)
+                    print(response.error as Any)
                     
                     //***********  TO BE FIXED ***************************************
                          if response.response?.statusCode  == 404 {
@@ -454,7 +465,7 @@ class GitHubAPIManager {
             .response { response in
     
                 guard response.error == nil else {
-                    print(response.error)
+                    print(response.error as Any)
                     return
                 }
                 completionHandler(response.error as NSError?)
@@ -467,10 +478,9 @@ class GitHubAPIManager {
            // .response { (request, response, data, error) in
                 
             .response {  response in
-                
-                
+                            
                 guard response.error == nil else {
-                    print(response.error)
+                    print(response.error as Any)
                     return
                 }
                 completionHandler(response.error as NSError?)
@@ -547,7 +557,7 @@ class GitHubAPIManager {
                 //guard error == nil else {
                 guard response.error == nil else {
                     
-                    print(response.error)
+                    print(response.error as Any)
                     completionHandler(.failure(response.error!))
                     return
                 }

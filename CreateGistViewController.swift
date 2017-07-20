@@ -106,7 +106,7 @@ class CreateGistViewController: XLFormViewController {
             guard result.error == nil,
                 let successValue = result.value
                 , successValue == true else {
-                    print(result.error)
+                    print(result.error as Any)
                     let alertController = UIAlertController(title: "Could not create gist",
                                                             message: "Sorry, your gist couldn't be created. " +
                         "Maybe GitHub is down or you don't have an internet connection.",

@@ -65,7 +65,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
         GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler =
             { error in
                 guard error == nil else {
-                    print(error)
+                    print(error as Any)
                     self.isLoading = false
                             if error?.domain == NSURLErrorDomain && error?.code == NSURLErrorNotConnectedToInternet {
                                 self.showNotConnectedBanner()
@@ -146,6 +146,7 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
                 let updateString = "Last Updated at " + self.dateFormatter.string(from: now)
                 self.refreshControl?.attributedTitle = NSAttributedString(string: updateString)
                 
+                // *********************** important **********************************
                 self.tableView.reloadData()
                 
             }  // end closure
@@ -570,9 +571,9 @@ class GistsViewController: UITableViewController, LoginViewDelegate, SFSafariVie
             
             // delete from API
             GitHubAPIManager.sharedInstance.deleteGist(idToDelete) {
-                (error) in
+                error in
                 if let _ = error {
-                    print(error)
+                    print(error as Any)
                     // Put it back
                     self.gists.insert(gistToDelete, at: (indexPath as NSIndexPath).row)
                     tableView.insertRows(at: [indexPath], with: .right)

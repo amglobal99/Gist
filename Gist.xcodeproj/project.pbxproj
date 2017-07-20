@@ -281,6 +281,7 @@
 				TargetAttributes = {
 					0F404AE41D198D200045845D = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 7TC98CE9GK;
 						LastSwiftMigration = 0800;
 					};
 					0F4B3C0C1D749F60006A31AE = {
@@ -558,6 +559,7 @@
 			baseConfigurationReference = A6B80AB1DFF442D16F50C6BC /* Pods-Gist.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7TC98CE9GK;
 				INFOPLIST_FILE = Gist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.Gist;
@@ -571,6 +573,7 @@
 			baseConfigurationReference = 1C4CE90711C52956C59105F2 /* Pods-Gist.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7TC98CE9GK;
 				INFOPLIST_FILE = Gist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.natsys.Gist;

@@ -41,12 +41,12 @@ class GistViewController: UIViewController {
         guard let gistId = gist?.id else {
             return
         }
+      
         GitHubAPIManager.sharedInstance.isGistStarred(gistId) {
             result in
             guard result.error == nil else {
-                print(result.error)
-                
-                
+                print(result.error as Any)
+               
                 if result.error?._domain != NSURLErrorDomain {return}
                 
                 if result.error?._code == NSURLErrorUserAuthenticationRequired {
@@ -63,12 +63,11 @@ class GistViewController: UIViewController {
                         "Try again when you're connected to the internet")
                     
                 }
-                
-                
-                
-                
+              
                 return
-            }
+            } // end guard
+         
+         
             if let status = result.value , self.isStarred == nil { // just got it
                 self.isStarred = status
                 self.tableView?.insertRows(
@@ -76,7 +75,13 @@ class GistViewController: UIViewController {
                     with: .automatic)
             }
         }
-    }
+    } // end func
+   
+   
+   
+   
+   
+   
     
     func showOrangeNotConnectedBanner(_ title: String, message: String) {
         // show not connected error & tell em to try again when they do have a connection
@@ -122,7 +127,7 @@ class GistViewController: UIViewController {
         GitHubAPIManager.sharedInstance.starGist(gistId) {
             (error) in
             guard error == nil else {
-                print(error)
+               // print(error)
                 if error?.domain == NSURLErrorDomain &&
                     error?.code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title: "Could not star gist",
@@ -154,7 +159,7 @@ class GistViewController: UIViewController {
         GitHubAPIManager.sharedInstance.unstarGist(gistId) {
             (error) in
             guard error == nil else {
-                print(error)
+                print(error as Any)
                 if error?.domain == NSURLErrorDomain &&
                     error?.code == NSURLErrorUserAuthenticationRequired {
                     self.alertController = UIAlertController(title: "Could not unstar gist",
